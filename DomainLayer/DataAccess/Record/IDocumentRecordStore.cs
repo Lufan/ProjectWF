@@ -26,7 +26,7 @@ namespace DomainLayer.DataAccess.Record
             TUser user
             );
 
-        Task<long> UpdateAsync<TUVal>(
+        Task<long> UpdateAsync<TQVal, TUVal>(
             Expression<Func<TDocument, bool>> predicat,
             Expression<Func<TDocument, TUVal>> updateExpression,
             TUVal updateValue,
