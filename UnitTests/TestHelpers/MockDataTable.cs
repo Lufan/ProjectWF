@@ -52,11 +52,19 @@ namespace UnitTests.TestHelpers
         {
             return await Task.Run(() =>
             {
-                var elements = _collection.Where(e => predicat.Compile()(e));
-                long count = elements.Count();
-                foreach (var elem in elements)
+                long count = 0;
+                while (true)
                 {
-                    _collection.Remove(elem);
+                    var elem = _collection.FirstOrDefault(e => predicat.Compile()(e));
+                    if (elem != null)
+                    {
+                        _collection.Remove(elem);
+                        ++count;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
                 return count;
             });
@@ -66,12 +74,20 @@ namespace UnitTests.TestHelpers
         {
             return await Task.Run(() =>
             {
-                var elements = _collection.Where(e => e.Id.Equals(doc.Id));
-                long count = elements.Count();
-                foreach (var elem in elements)
+                long count = 0;
+                while (true)
                 {
-                    _collection.Remove(elem);
-                    _collection.Add(doc);
+                    var elem = _collection.FirstOrDefault(e => e.Id.Equals(doc.Id));
+                    if (elem != null)
+                    {
+                        _collection.Remove(elem);
+                        _collection.Add(doc);
+                        ++count;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
                 return count;
             });
@@ -85,13 +101,13 @@ namespace UnitTests.TestHelpers
         {
             return await Task.Run(() =>
             {
-                var elements = _collection.Where(e => predicat.Compile()(e));
-                long count = elements.Count();
                 MemberExpression body = (MemberExpression)updateExpression.Body;
                 string propertyName = body.Member.Name;
-                foreach (var elem in elements)
+                long count = 0;
+                while (true)
                 {
-                    //try
+                    var elem = _collection.FirstOrDefault(e => predicat.Compile()(e));
+                    if (elem != null)
                     {
                         var prpInfo = elem.GetType().GetProperty(propertyName, typeof(TUVal));
                         if (prpInfo == null)
@@ -99,11 +115,15 @@ namespace UnitTests.TestHelpers
                             --count;
                             continue;
                         }
+                        _collection.Remove(elem);
                         prpInfo.SetValue(elem, updateValue, null);
+                        _collection.Add(elem);
+                        ++count;
                     }
-                    //catch (System.Reflection.AmbiguousMatchException e) { }
-                    _collection.Remove(elem);
-                    _collection.Add(elem);
+                    else
+                    {
+                        break;
+                    }
                 }
                 return count;
             });
