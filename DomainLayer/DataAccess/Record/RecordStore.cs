@@ -147,7 +147,7 @@ namespace DomainLayer.DataAccess.Record
         /// <returns>
         /// Task<long> representing the numbers of the updated documents.
         /// </returns>
-        public async Task<long> UpdateAsync<TQVal, TUVal>(
+        public async Task<long> UpdateAsync<TUVal>(
             Expression<Func<TDocument, bool>> predicat,
             Expression<Func<TDocument, TUVal>> updateExpression,
             TUVal updateValue,

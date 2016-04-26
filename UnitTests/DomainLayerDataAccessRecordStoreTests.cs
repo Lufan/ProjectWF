@@ -71,10 +71,93 @@ namespace UnitTests
             result1.Wait();
             var result2 = recordStore.DeleteAsync(doc, new TestUser());
             result2.Wait();
+
             //Assert
             Assert.AreEqual(1, result1.Result, "Must delete exactly one object.");
             Assert.AreEqual(0, result2.Result, "Must delete exactly zero object.");
-            //Assert.AreEqual(0, dataTable.GetCollection().Count(), "Collection must be empty.");
+            Assert.AreEqual(0, dataTable.GetCollection().Count(), "Collection must be empty.");
+        }
+
+        [TestMethod]
+        public void CanDeleteSeveralDocument()
+        {
+            //Arrange
+            string firstId = "1", firstName = "First", firstDescription = "first description";
+            var doc1 = new TestPOCO { Id = firstId, Name = firstName, Description = firstDescription };
+            var doc2 = new TestPOCO { Id = firstId, Name = firstName, Description = firstDescription };
+            var doc3 = new TestPOCO { Id = firstId, Name = firstName, Description = firstDescription };
+            var dataTable = new MockDataTable<TestPOCO>();
+            dataTable.Insert(doc1).Wait();
+            dataTable.Insert(doc2).Wait();
+            dataTable.Insert(doc3).Wait();
+            var recordStore = setupRecordStore<TestUser>(dataTable);
+
+            //Act
+            var result1 = recordStore.DeleteAsync(doc1, new TestUser());
+            result1.Wait();
+            var result2 = recordStore.DeleteAsync(doc2, new TestUser());
+            result2.Wait();
+
+            //Assert
+            Assert.AreEqual(3, result1.Result, "Must delete exactly tree objects.");
+            Assert.AreEqual(0, result2.Result, "Must delete exactly zero object.");
+            Assert.AreEqual(0, dataTable.GetCollection().Count(), "Collection must be empty.");
+        }
+
+        [TestMethod]
+        public void CanUpdateDocument()
+        {
+            //Arrange
+            string firstId = "1", firstName = "First", firstDescription = "first description";
+            string secondId = "2";
+            string updateName = "New Name";
+            var doc = new TestPOCO { Id = firstId, Name = firstName, Description = firstDescription };
+            var doc2 = new TestPOCO { Id = secondId };
+            var dataTable = new MockDataTable<TestPOCO>();
+            dataTable.Insert(doc).Wait();
+            var recordStore = setupRecordStore<TestUser>(dataTable);
+
+            //Act
+            doc.Name = updateName;
+            var result1 = recordStore.UpdateAsync(doc, new TestUser());
+            result1.Wait();
+            var result2 = recordStore.UpdateAsync(doc2, new TestUser());
+            result2.Wait();
+
+            //Assert
+            Assert.AreEqual(1, result1.Result, "Must udate exactly one objects.");
+            Assert.AreEqual(0, result2.Result, "Must update exactly zero object.");
+            Assert.AreEqual(updateName, 
+                dataTable.
+                GetCollection().
+                FirstOrDefault(d => d.Id.Equals(firstId)).
+                Name, "Name must be updated.");
+        }
+
+        [TestMethod]
+        public void CanUpdateFieldsDocument()
+        {
+            //Arrange
+            string firstId = "1", firstName = "First", firstDescription = "first description";
+            string secondId = "2", secondName = "Second", secondDescription = "second description";
+            string thirdId = "3", thirdName = "Third", thirdDescription = "third description";
+            string updateName = "New Name";
+            var doc1 = new TestPOCO { Id = firstId, Name = firstName, Description = firstDescription };
+            var doc2 = new TestPOCO { Id = secondId, Name = secondName, Description = secondDescription };
+            var doc3 = new TestPOCO { Id = thirdId, Name = thirdName, Description = thirdDescription };
+            var dataTable = new MockDataTable<TestPOCO>();
+            dataTable.Insert(doc1).Wait();
+            dataTable.Insert(doc2).Wait();
+            dataTable.Insert(doc3).Wait();
+            var recordStore = setupRecordStore<TestUser>(dataTable);
+
+            //Act
+            var result = recordStore.UpdateAsync(d => true, f => f.Name, updateName, new TestUser());
+            result.Wait();
+
+            //Assert
+            Assert.AreEqual(3, result.Result, "Must udate exactly three objects.");
+            Assert.IsTrue(dataTable.GetCollection().Any(d => d.Name.Equals(updateName)), "Name must be updated.");
         }
     }
 }
