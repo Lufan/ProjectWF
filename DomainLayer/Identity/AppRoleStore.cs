@@ -18,6 +18,7 @@ namespace DomainLayer.Identity
 
         private IDataTable<TRole> GetRolesCollection()
         {
+            // TO DO: get collection (table) name from config file
             if (_collection == null) _collection = _database.GetCollection<TRole>("Roles");
             return _collection;
         }

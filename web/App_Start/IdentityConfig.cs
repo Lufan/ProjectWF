@@ -19,6 +19,7 @@ namespace web.App_Start
                 new CookieAuthenticationOptions
                 {
                     AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                    // TO DO: get path from config file
                     LoginPath = new PathString("/Account/Login"),
                 });
         }

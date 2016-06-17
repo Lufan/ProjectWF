@@ -19,6 +19,7 @@ namespace DomainLayer.Identity
 
         private IDataTable<TUser> GetUsersCollection()
         {
+            // TO DO: get collection (table) name from config file
             if (_collection == null) _collection = _database.GetCollection<TUser>("Users");
             return _collection;
         }
