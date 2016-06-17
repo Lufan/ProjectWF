@@ -4,6 +4,9 @@ using System.Web.Mvc;
 
 using Ninject;
 
+using DomainLayer.Identity;
+using DomainLayer.DataAccess.MongoDb;
+
 namespace web.Infrastructure
 {
     public class NinjectDependencyResolver : IDependencyResolver
@@ -28,6 +31,8 @@ namespace web.Infrastructure
         private void AddBindings()
         {
             // TO DO: add bindings here
+            // Identity MongoDbContext bindings
+            kernel.Bind<IIdentityDbContext>().To<MongoIdentityDbContext>().InSingletonScope();
         }
     }
 }

@@ -77,7 +77,8 @@
     <Compile Include="Identity\AppUserStore.cs" />
     <Compile Include="Identity\IAppUser.cs" />
     <Compile Include="Identity\IAppUserStore.cs" />
-    <Compile Include="Identity\MongoIdentityDbContext.cs" />
+    <Compile Include="Identity\IIdentityDbContext.cs" />
+    <Compile Include="DataAccess\MongoDb\MongoIdentityDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

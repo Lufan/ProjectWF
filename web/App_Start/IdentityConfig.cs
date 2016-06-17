@@ -10,9 +10,14 @@ namespace web.App_Start
 {
     public class IdentityConfig
     {
+        IIdentityDbContext context;
+        public IdentityConfig(IIdentityDbContext context)
+        {
+            this.context = context;
+        }
         public void Configuration(IAppBuilder app)
         {
-            app.CreatePerOwinContext<IDbContext>(MongoIdentityDbContext.Create);
+            app.CreatePerOwinContext<IDbContext>(context.Create);
             app.CreatePerOwinContext<AppUserManager>(AppUserManager.Create);
             app.CreatePerOwinContext<AppRoleManager>(AppRoleManager.Create);
             app.UseCookieAuthentication(
