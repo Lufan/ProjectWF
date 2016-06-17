@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Web;
 
 using web.Infrastructure;
+using web.Models;
 using DomainLayer.Identity;
 
 

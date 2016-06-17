@@ -15,7 +15,7 @@ namespace DomainLayer.DataAccess.MongoDb
                 throw new ArgumentNullException("connectionString",
                     "Connection string is null or empty.");
             }
-
+            // TO DO try catch MongoDb errors
             var url = new MongoUrl(connectionString);
             var client = new MongoClient(url);
             if (url.DatabaseName == null)

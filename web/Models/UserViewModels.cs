@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using DomainLayer.Identity;
 
-namespace PresentationLayer.Models
+namespace web.Models
 {
     public class AppUserCreateModel
     {
