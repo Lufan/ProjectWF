@@ -24,7 +24,7 @@ namespace web.Controllers
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 //TO DO: Create user friendly information page
-                //return View("Error", new HandleErrorInfo(new System.Exception("Доступ разрешен только администратору."), "Account", "Login"));
+                return View("Error", new HandleErrorInfo(new System.Exception("Доступ разрешен только администратору."), "Account", "Login"));
             }
             ViewBag.returnUrl = returnUrl;
             return View();
@@ -44,7 +44,8 @@ namespace web.Controllers
                 AppUser user = await UserManager.FindAsync(details.Name, details.Password);
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Invalid name or password.");
+                    // TO DO strings from resources
+                    ModelState.AddModelError("", "Неверное имя или пароль.");
                 }
                 else
                 {
