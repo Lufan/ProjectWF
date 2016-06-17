@@ -9,7 +9,7 @@ using DomainLayer.DataAccess;
 
 namespace DomainLayer.Identity
 {
-    public sealed class AppUserStore<TUser> : IAppUserStore<TUser>, IUserRoleStore<TUser> where TUser : AppUser, IDocument
+    public sealed class AppUserStore<TUser> : IAppUserStore<TUser>, IUserRoleStore<TUser> where TUser : AppUser
     {
         private readonly IDatabase _database;
 
