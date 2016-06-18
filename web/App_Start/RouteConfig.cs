@@ -12,6 +12,7 @@ namespace web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("elmah");
 
             routes.MapRoute(
                 name: "Default",
