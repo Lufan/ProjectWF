@@ -6,9 +6,11 @@ using System.Web.Mvc;
 
 namespace web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         // GET: Home
+        [AllowAnonymous]
         public ActionResult Index()
         {
             string title = "Сводная информация.";
