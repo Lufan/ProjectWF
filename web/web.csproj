@@ -206,7 +206,13 @@
     </Compile>
     <Compile Include="Infrastructure\AppRoleManager.cs" />
     <Compile Include="Infrastructure\AppUserManager.cs" />
+    <Compile Include="Infrastructure\ContactsQueryManager.cs" />
+    <Compile Include="Infrastructure\ContactsRecordManager.cs" />
+    <Compile Include="Infrastructure\IQueryManager.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
+    <Compile Include="Infrastructure\OrganizationQueryManager.cs" />
+    <Compile Include="Infrastructure\QueryManager.cs" />
+    <Compile Include="Infrastructure\RecordManager.cs" />
     <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
