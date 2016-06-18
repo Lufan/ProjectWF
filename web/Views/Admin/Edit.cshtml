@@ -1,0 +1,24 @@
+﻿@model DomainLayer.Identity.AppUser
+
+@{
+    ViewBag.Title = "Редактирование данных пользователя";
+}
+
+<h2>Пользователь</h2>
+@Html.ValidationSummary(false)
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+        <label>Имя</label>
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Пароль</label>
+        <input name="password" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    @Html.ActionLink("Отмена", "Index", null, new { @class = "btn btn-default" })
+}
+

@@ -62,7 +62,7 @@ namespace PresentationLayer.Controllers
             }
             else
             {
-                return View("Error", new string[] { "Role Not Found." });
+                return View("Error", new string[] { "Роль не найдена." });
             }
         }
 
@@ -108,7 +108,7 @@ namespace PresentationLayer.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View("Error", new string[] { "Role not found." });
+            return View("Error", new string[] { "Роль не найдена." });
         }
 
         private void AddErrorsFromResult(IdentityResult result)

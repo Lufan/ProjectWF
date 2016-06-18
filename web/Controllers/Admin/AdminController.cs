@@ -71,7 +71,7 @@ namespace PresentationLayer.Controllers
             }
             else
             {
-                return View("Error", new string[] { "User Not Found" });
+                return View("Error", new string[] { "Пользователь не найден" });
             }
         }
 
@@ -136,7 +136,7 @@ namespace PresentationLayer.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "User Not Found");
+                ModelState.AddModelError("", "Пользователь не найден");
             }
             return View(user);
         }
