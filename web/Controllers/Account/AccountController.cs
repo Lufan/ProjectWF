@@ -23,7 +23,7 @@ namespace web.Controllers
             ViewBag.CurrentPage = "login";
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                return Redirect(returnUrl);
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.returnUrl = returnUrl;
             return View();
