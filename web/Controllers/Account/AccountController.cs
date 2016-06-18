@@ -23,8 +23,7 @@ namespace web.Controllers
             ViewBag.CurrentPage = "login";
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                //TO DO: Create user friendly information page
-                return View("Error", new HandleErrorInfo(new System.Exception("Доступ разрешен только администратору."), "Account", "Login"));
+                return Redirect(returnUrl);
             }
             ViewBag.returnUrl = returnUrl;
             return View();

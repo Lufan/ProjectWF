@@ -1,0 +1,55 @@
+﻿<div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarToCollapse">
+        <span class="sr-only">Меню</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    @Html.ActionLink("Отдел БАД", "Index", "Home", null, new { @class = (ViewBag.currentPage == "main" ? "navbar-brand active" : "navbar-brand") })
+</div>
+<div class="collapse navbar-collapse" id="navbarToCollapse">
+    <ul class="nav navbar-nav">
+        <li class="@(ViewBag.CurrentPage == "projects" ? "active" : "")">
+            @Html.ActionLink("Проекты", "Index", "Projects", null, null)
+        </li>
+        <li class="@(ViewBag.CurrentPage == "tasks" ? "active" : "")">
+            @Html.ActionLink("Задачи", "Index", "Tasks", null, null)
+        </li>
+        <li class="@(ViewBag.CurrentPage == "mails" ? "active" : "")">
+            @Html.ActionLink("Письма", "Index", "Mails", null, null)
+        </li>
+        <li class="@(ViewBag.CurrentPage == "plans" ? "active" : "")">
+            @Html.ActionLink("План", "Index", "Plans", null, null)
+        </li>
+
+        <li class="@((ViewBag.CurrentPage == "contacts") || (ViewBag.CurrentPage == "organizations") ? "active dropdown pointer" : "dropdown pointer")">
+            <a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+                Контакты
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation">
+                    @Html.ActionLink("Контакты", "Index", "Contacts", null, new { role = "menuitem", tabindex = "-1" })
+                </li>
+                <li role="presentation">
+                    @Html.ActionLink("Организации", "Index", "Organizations", null, new { role = "menuitem", tabindex = "-1" })
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+        @if (@Request.IsAuthenticated)
+        {
+            <li>
+                @Html.ActionLink("Выход", "Logout", "Account", null, null)
+            </li>
+        }
+        else
+        {
+            <li>
+                @Html.ActionLink("Вход", "Login", "Account", new { returnUrl = @Request.Url.AbsoluteUri }, null)
+            </li>
+        }
+    </ul>
+</div>

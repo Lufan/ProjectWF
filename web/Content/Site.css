@@ -1,8 +1,8 @@
-﻿body {
+﻿/*body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
+*/
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -16,3 +16,15 @@ textarea {
     max-width: 280px;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+.table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
