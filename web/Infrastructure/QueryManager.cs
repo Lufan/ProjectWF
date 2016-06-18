@@ -40,21 +40,7 @@ namespace web.Infrastructure
             {
                 return null;
             }
-            //Regex pattern
-            var pattern = "";
-            //Split by words
-            var regex = new Regex(@"(\w+[a-zA-Z0-9-_]\w+)+");
-            var match = regex.Matches(name);
-            //If we have several words
-            if (match.Count > 1)
-            {
-                pattern = string.Join("|", match); //create pattern for regex OR for all words
-            }
-            else
-            {
-                pattern = name;
-            }
-            return _store.FindByFieldAsync(expression, pattern);
+            return _store.FindByFieldAsync(expression, name);
         }
 
         public Task<IQueryable<TDocument>> TakeNAsync(int count, int startPosition = 0)

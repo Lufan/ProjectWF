@@ -67,11 +67,16 @@
     <Compile Include="DomainLayerDataAccessRecordStoreTests.cs" />
     <Compile Include="TestHelpers\MockDataTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="webInfrastructureQueryManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DomainLayer\DomainLayer.csproj">
       <Project>{5665da02-39cd-4982-9f9e-db5c6cc8fb6b}</Project>
       <Name>DomainLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\web\web.csproj">
+      <Project>{250abe28-bd45-466a-9e1b-7305bca5aea0}</Project>
+      <Name>web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
