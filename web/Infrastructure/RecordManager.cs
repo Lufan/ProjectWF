@@ -37,7 +37,7 @@ namespace web.Infrastructure
             return _store.CreateAsync(document, user);
         }
 
-        public Task DeleteAsync(TDocument document, TUser user)
+        public Task<long> DeleteAsync(TDocument document, TUser user)
         {
             if (document == null)
             {
