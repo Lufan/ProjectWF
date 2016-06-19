@@ -50,7 +50,7 @@ namespace web.Infrastructure
             kernel.Bind<IDocumentQueryStore<IOrganization>>().To<OrganizationQueryStore>().InSingletonScope();
 
             //MongoDatabase bindings for QueryStore
-            //Contacts and Organizations collections plased into ContactDb database
+            //Contacts and Organizations collections placed into ContactDb database
             kernel.Bind<IContactDbContext>().To<MongoContactDbContext>().InSingletonScope();
             #endregion Query bindings
         }

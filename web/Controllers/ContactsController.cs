@@ -1,4 +1,7 @@
 ﻿using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+
 
 using web.Infrastructure;
 using DomainLayer.Contact;
@@ -20,7 +23,18 @@ namespace web.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            if (Request.IsAuthenticated)
+            ViewBag.isAuthenticated = Request.IsAuthenticated;
+            ViewBag.CurrentPage = "contacts";
+
+            var contacts = GetViewModel(10, 0);
+
+            return View(contacts);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Contact(string id)
+        {
+            if (id != null)
             {
 
             }
@@ -28,18 +42,46 @@ namespace web.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        public ActionResult Contact(string id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Contact(ContactsViewModel model)
         {
+
             ViewBag.CurrentPage = "contacts";
-            return View();
+            return Redirect("Index");
+        }
+
+        private IEnumerable<ContactsViewModel> GetViewModel(int count = 10, int start_pos = 0)
+        {
+            var contacts = contactQM.TakeNAsync(count, start_pos);
+            IList<ContactsViewModel> result = new List<ContactsViewModel>(count);
+            foreach (var contact in contacts.Result)
+            {
+                var organizationName = "";
+                // TO DO - select all names using only one query to database 
+                if (contact.OrganizationId != null)
+                {
+                    organizationName = organizationQM.FindByIdAsync(contact.OrganizationId).Result.OrganizationName;
+                }
+                result.Add(
+                    new ContactsViewModel
+                    {
+                        Id = contact.Id,
+                        Name = contact.Name,
+                        Shurname = contact.Shurname,
+                        Patronymic = contact.Patronymic,
+                        Emails = contact.Emails,
+                        Phones = contact.Phones,
+                        OrganizationId = contact.OrganizationId,
+                        OrganizationName = organizationName,
+                        Position = contact.Position,
+                        Remarks = contact.Remarks
+                    });
+            }
+            return result.AsEnumerable();
         }
 
         private IQueryManager<IContact> contactQM;
         private IQueryManager<IOrganization> organizationQM;
-
-        //magic default value
-        //TO DO: 
-        private const int defaultCountsPerPage = 20;
     }
 }

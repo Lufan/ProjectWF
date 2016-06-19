@@ -1,7 +1,73 @@
-﻿
+﻿@using web.Models
+ 
+@model IEnumerable<ContactsViewModel>
+
 @{
-    ViewBag.Title = "Contacts";
+    ViewBag.Title = "Справочник контактов";
 }
-
-<h2>Contacts Index</h2>
-
+<div class="container">
+    <div class="panel panel-info">
+        <div class="panel-heading">Контакты</div>
+        <table class="table table-striped table-responsive">
+            <caption>
+                @Html.ActionLink("Добавить...", "New", null, new  { @class="btn btn-default pull-right @((Request.IsAuthenticated) ? \"\" : \" disabled\")" })
+                <div class="input-group pull-left">
+                    Поиск по контактам:
+                    <input class="input-sm" type="text" autofocus />
+                </div>
+            </caption>
+            <colgroup>
+                <col class="col-sm-2" />
+                <col class="col-sm-2" />
+                <col class="col-sm-2" />
+                <col class="col-sm-3" />
+                <col class="col-sm-2" />
+                <col class="col-sm-2" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <div>
+                            <span class="dropdown-toggle pointer" type="button">
+                                Фамилия <span></span>
+                            </span>
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <div>
+                            <span class="dropdown-toggle pointer" type="button">
+                                Имя <span></span>
+                            </span>
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <div>
+                            <span class="dropdown-toggle pointer" type="button">
+                                Отчество <span></span>
+                            </span>
+                        </div>
+                    </th>
+                    <th scope="col">Телефоны</th>
+                    <th scope="col">Организация</th>
+                    <th scope="col">Эл.адрес</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contact in Model) { 
+                <tr>
+                    <td><a href="/Contacts/Contact/@contact.Id">@contact.Shurname</a></td>
+                    <td><a href="/Contacts/Contact/@contact.Id">@contact.Name</a></td>
+                    <td><a href="/Contacts/Contact/@contact.Id">@contact.Patronymic</a></td>
+                    <td>
+                        @foreach (var phone in contact.Phones) { 
+                        <small>@(phone.Value + "; ")</small>
+                        }
+                    </td>
+                    <td><a href="/Organization/Organizations/@contact.OrganizationId">@contact.OrganizationName</a></td>
+                    <td></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
