@@ -5,8 +5,8 @@ namespace DomainLayer.Contact
 {
     public sealed class ContactQueryStore : QueryStore<IContact>
     {
-        public ContactQueryStore(IDbContext dbcontext)
-            : base(dbcontext, "Contacts")
+        public ContactQueryStore(IContactDbContext dbcontext)
+            : base(dbcontext.Create(), "Contacts")
         {
         }
     }

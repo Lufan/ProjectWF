@@ -6,8 +6,8 @@ namespace DomainLayer.Contact
 {
     public sealed class ContactRecordStore : RecordStore<IContact, IAppUser>
     {
-        public ContactRecordStore(IDbContext context)
-            : base(context, "Contacts")
+        public ContactRecordStore(IContactDbContext context)
+            : base(context.Create(), "Contacts")
         { }
     }
 }

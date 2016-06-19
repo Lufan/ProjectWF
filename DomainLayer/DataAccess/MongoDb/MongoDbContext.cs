@@ -1,19 +1,25 @@
 ﻿using System;
 using MongoDB.Driver;
+using System.Configuration;
 
 namespace DomainLayer.DataAccess.MongoDb
 {
-
     public class MongoDbContext : IDbContext
     {
         private readonly IMongoDatabase _database;
 
-        public MongoDbContext(string connectionString)
+        public MongoDbContext(string connectionStringName)
         {
-            if (string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrEmpty(connectionStringName))
             {
                 throw new ArgumentNullException("connectionString",
                     "Connection string is null or empty.");
+            }
+            string connectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException("connectionStringName",
+                    "Connection string with name: " + connectionStringName + " is null or empty.");
             }
             // TO DO try catch MongoDb errors
             var url = new MongoUrl(connectionString);

@@ -67,10 +67,10 @@
     <Compile Include="Contact\ContactRecordStore.cs" />
     <Compile Include="Contact\IAdress.cs" />
     <Compile Include="Contact\IContact.cs" />
+    <Compile Include="Contact\IContactDbContext.cs" />
     <Compile Include="Contact\IOrganization.cs" />
     <Compile Include="Contact\IPosition.cs" />
     <Compile Include="Contact\EnPosition.cs" />
-    <Compile Include="Contact\MongoContactDbContext.cs" />
     <Compile Include="Contact\Organization.cs" />
     <Compile Include="Contact\OrganizationQueryStore.cs" />
     <Compile Include="Contact\OrganizationRecordStore.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="DataAccess\IDataTable.cs" />
     <Compile Include="DataAccess\IDbContext.cs" />
     <Compile Include="DataAccess\IDocument.cs" />
+    <Compile Include="DataAccess\MongoDb\MongoContactDbContext.cs" />
     <Compile Include="DataAccess\MongoDb\MongoDataTable.cs" />
     <Compile Include="DataAccess\MongoDb\MongoDbContext.cs" />
     <Compile Include="DataAccess\Query\IDocumentQueryStore.cs" />

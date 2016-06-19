@@ -5,8 +5,8 @@ namespace DomainLayer.Contact
 {
     public sealed class OrganizationQueryStore : QueryStore<IOrganization>
     {
-        public OrganizationQueryStore(IDbContext dbcontext)
-            : base(dbcontext, "Organizations")
+        public OrganizationQueryStore(IContactDbContext dbcontext)
+            : base(dbcontext.Create(), "Organizations")
         { }
     }
 }

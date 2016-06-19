@@ -10,7 +10,7 @@ namespace web.Controllers
     [Authorize]
     public class ContactsController : Controller
     {
-        public ContactsController(ContactsQueryManager contactQM, OrganizationsQueryManager organizationQM)
+        public ContactsController(IQueryManager<IContact> contactQM, IQueryManager<IOrganization> organizationQM)
         {
             this.contactQM = contactQM;
             this.organizationQM = organizationQM;
@@ -35,8 +35,8 @@ namespace web.Controllers
             return View();
         }
 
-        private ContactsQueryManager contactQM;
-        private OrganizationsQueryManager organizationQM;
+        private IQueryManager<IContact> contactQM;
+        private IQueryManager<IOrganization> organizationQM;
 
         //magic default value
         //TO DO: 

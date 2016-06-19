@@ -6,8 +6,8 @@ namespace DomainLayer.Contact
 {
     public sealed class OrganizationRecordStore : RecordStore<IOrganization, IAppUser>
     {
-        public OrganizationRecordStore(IDbContext context)
-            : base(context, "Organizations")
+        public OrganizationRecordStore(IContactDbContext context)
+            : base(context.Create(), "Organizations")
         { }
     }
 }
