@@ -121,13 +121,13 @@ namespace UnitTests
             var result3 = queryManager.FindByIdAsync(thirdId).Result;
 
             //Assert
-            Assert.AreEqual<string>(result1.Name, firstName);
-            Assert.AreEqual<string>(result1.Id, firstId);
-            Assert.AreEqual<string>(result1.Shurname, firstShurname);
-            Assert.AreEqual<string>(result2.Name, secondName);
-            Assert.AreEqual<string>(result2.Id, secondId);
-            Assert.AreEqual<string>(result2.Shurname, secondShurname);
-            Assert.AreEqual(result3, null);
+            Assert.AreEqual<string>(result1.Name, firstName, "Names must be equal.");
+            Assert.AreEqual<string>(result1.Id, firstId, "Ids must be equal.");
+            Assert.AreEqual<string>(result1.Shurname, firstShurname, "Shurnames must be equal");
+            Assert.AreEqual<string>(result2.Name, secondName, "Names must be equal.");
+            Assert.AreEqual<string>(result2.Id, secondId, "Ids must be equal.");
+            Assert.AreEqual<string>(result2.Shurname, secondShurname, "Shurnames must be equal");
+            Assert.AreEqual(result3, null, "Must be null.");
         }
 
         [TestMethod]
@@ -164,15 +164,15 @@ namespace UnitTests
             var result4_1 = queryManager.FindByNameAsync(m => m.Name + " " + m.Shurname, firstName).Result;
 
             //Assert
-            Assert.AreEqual<int>(result1_1.Count(), 1);
-            Assert.AreEqual<string>(result1_1.ElementAt(0).Name, firstName);
-            Assert.AreEqual<int>(result1_2.Count(), 1);
-            Assert.AreEqual<string>(result1_2.ElementAt(0).Name, firstName);
-            Assert.AreEqual<int>(result2_1.Count(), 2);
-            Assert.AreEqual<int>(result2_2.Count(), 1);
-            Assert.AreEqual<string>(result2_2.ElementAt(0).Name, secondName);
-            Assert.AreEqual<int>(result3_1.Count(), 0);
-            Assert.AreEqual<int>(result4_1.Count(), 2);
+            Assert.AreEqual<int>(result1_1.Count(), 1,"Must find exactly one objects.");
+            Assert.AreEqual<string>(result1_1.ElementAt(0).Name, firstName, "Names must be equal.");
+            Assert.AreEqual<int>(result1_2.Count(), 1, "Must find exactly one objects.");
+            Assert.AreEqual<string>(result1_2.ElementAt(0).Name, firstName, "Names must be equal.");
+            Assert.AreEqual<int>(result2_1.Count(), 2, "Must find exactly two objects.");
+            Assert.AreEqual<int>(result2_2.Count(), 1, "Must find exactly one objects.");
+            Assert.AreEqual<string>(result2_2.ElementAt(0).Name, secondName, "Names must be equal.");
+            Assert.AreEqual<int>(result3_1.Count(), 0, "Must find exactly zero objects.");
+            Assert.AreEqual<int>(result4_1.Count(), 2, "Must find exactly two objects.");
         }
 
         [TestMethod]
@@ -209,13 +209,13 @@ namespace UnitTests
             var result4_1 = queryManager.TakeNAsync(3, 3).Result;
 
             //Assert
-            Assert.AreEqual<int>(result1_1.Count(), 1);
-            Assert.AreEqual<int>(result1_2.Count(), 1);
-            Assert.AreEqual<int>(result2_1.Count(), 2);
-            Assert.AreEqual<int>(result2_2.Count(), 2);
-            Assert.AreEqual<int>(result3_1.Count(), 3);
-            Assert.AreEqual<int>(result3_2.Count(), 2);
-            Assert.AreEqual<int>(result4_1.Count(), 0);
+            Assert.AreEqual<int>(result1_1.Count(), 1, "Must find exactly one objects.");
+            Assert.AreEqual<int>(result1_2.Count(), 1, "Must find exactly one objects.");
+            Assert.AreEqual<int>(result2_1.Count(), 2, "Must find exactly two objects.");
+            Assert.AreEqual<int>(result2_2.Count(), 2, "Must find exactly two objects.");
+            Assert.AreEqual<int>(result3_1.Count(), 3, "Must find exactly three objects.");
+            Assert.AreEqual<int>(result3_2.Count(), 2, "Must find exactly two objects.");
+            Assert.AreEqual<int>(result4_1.Count(), 0, "Must find exactly zero objects.");
         }
     }
 }
