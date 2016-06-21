@@ -28,7 +28,7 @@ namespace web.Controllers
 
             var contacts = GetViewModel(10, 0);
 
-            return View(contacts);
+            return View();
         }
 
         [AllowAnonymous]
@@ -46,7 +46,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Contact(ContactsViewModel model)
         {
-
+            //TO DO - validate and save data
             ViewBag.CurrentPage = "contacts";
             return Redirect("Index");
         }
