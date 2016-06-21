@@ -28,20 +28,20 @@ namespace DomainLayer.Contact
 
         public string Index { get; set; }
 
-        private IDictionary<string, string> _adressLines;
-        public IDictionary<string, string> AdressLines
+        private IList<string> _adressLines;
+        public IList<string> AdressLines
         {
             get
             {
                 if (_adressLines == null)
                 {
-                    _adressLines = new Dictionary<string, string>();
+                    _adressLines = new List<string>();
                 }
                 return _adressLines;
             }
             set
             {
-                _adressLines = value != null ? new Dictionary<string, string>(value) : null;
+                _adressLines = value != null ? new List<string>(value) : null;
             }
         }
 

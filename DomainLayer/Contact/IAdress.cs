@@ -12,8 +12,9 @@ namespace DomainLayer.Contact
 
         string Index { get; set; }
 
-        IDictionary<string, string> AdressLines { get; set; }
+        IList<string> AdressLines { get; set; }
 
+        //<phone number, note>
         IDictionary<string, string> Phones { get; set; }
     }
 }

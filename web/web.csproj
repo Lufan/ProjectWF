@@ -205,6 +205,7 @@
     <Compile Include="Controllers\Admin\AdminController.cs" />
     <Compile Include="Controllers\Admin\RoleAdminController.cs" />
     <Compile Include="Controllers\Api\ContactsController.cs" />
+    <Compile Include="Controllers\Api\OrganizationsController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -223,9 +224,11 @@
     <Compile Include="Infrastructure\IRecordManager.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Infrastructure\OrganizationQueryManager.cs" />
+    <Compile Include="Infrastructure\OrganizationsRecordManager.cs" />
     <Compile Include="Infrastructure\QueryManager.cs" />
     <Compile Include="Infrastructure\RecordManager.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
+    <Compile Include="Models\OrganizationsViewModel.cs" />
     <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
