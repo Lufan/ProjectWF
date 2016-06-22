@@ -15,13 +15,13 @@ using DomainLayer.Contact;
 using DomainLayer.Identity;
 using web.Models;
 
-namespace web.Controllers.Api
+namespace web.Controllers
 {
     [Authorize]
-    public class ContactsController : ApiController
+    public class ApiContactsController : ApiController
     {
-        public ContactsController(
-            IQueryManager<IContact> contactQM, 
+        public ApiContactsController(
+            IQueryManager<Contact> contactQM, 
             IQueryManager<IOrganization> organizationQM,
             IRecordManager<IContact, IAppUser> contactRM
             )
@@ -42,31 +42,38 @@ namespace web.Controllers.Api
         [AllowAnonymous]
         public IHttpActionResult Get(string id)
         {
-            var contact = contactQM.FindByIdAsync(id).Result;
-            if (contact != null)
+            try
             {
-                var organizationName = "";
-                // TO DO - select all organization names using only one query to database 
-                if (contact.OrganizationId != null)
+                var _contact = contactQM.FindByIdAsync(id);
+                var contact = _contact.Result;
+                if (contact != null)
                 {
-                    organizationName = organizationQM.FindByIdAsync(contact.OrganizationId).Result.OrganizationName;
+                    var organizationName = "";
+                    // TO DO - select all organization names using only one query to database 
+                    if (contact.OrganizationId != null)
+                    {
+                        organizationName = organizationQM.FindByIdAsync(contact.OrganizationId).Result.OrganizationName;
+                    }
+                    var result = new ContactsViewModel
+                    {
+                        Id = contact.Id,
+                        Name = contact.Name,
+                        Shurname = contact.Shurname,
+                        Patronymic = contact.Patronymic,
+                        Emails = contact.Emails,
+                        Phones = contact.Phones,
+                        OrganizationId = contact.OrganizationId,
+                        OrganizationName = organizationName,
+                        Position = contact.Position,
+                        Remarks = contact.Remarks
+                    };
+                    return Ok(result);
                 }
-                var result = new ContactsViewModel
-                {
-                    Id = contact.Id,
-                    Name = contact.Name,
-                    Shurname = contact.Shurname,
-                    Patronymic = contact.Patronymic,
-                    Emails = contact.Emails,
-                    Phones = contact.Phones,
-                    OrganizationId = contact.OrganizationId,
-                    OrganizationName = organizationName,
-                    Position = contact.Position,
-                    Remarks = contact.Remarks
-                };
-                return Ok(result);
             }
-
+            catch (Exception)
+            {
+                return BadRequest();
+            }
             return NotFound();
         }
 
@@ -180,7 +187,7 @@ namespace web.Controllers.Api
             return result.AsEnumerable();
         }
 
-        private IQueryManager<IContact> contactQM;
+        private IQueryManager<Contact> contactQM;
         private IQueryManager<IOrganization> organizationQM;
 
         private IRecordManager<IContact, IAppUser> contactRM;

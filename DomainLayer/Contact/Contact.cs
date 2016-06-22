@@ -8,11 +8,8 @@ namespace DomainLayer.Contact
     {
         public Contact()
         {
-
+            _Id = ObjectId.GenerateNewId();
         }
-
-        [BsonId]
-        public ObjectId _Id { get; set; }
 
         public string Id
         {
@@ -22,7 +19,9 @@ namespace DomainLayer.Contact
             }
         }
 
-        [BsonRequired]
+        [BsonId]
+        public ObjectId _Id { get; set; }
+
         public string Shurname { get; set; }
 
         public string Name { get; set; }

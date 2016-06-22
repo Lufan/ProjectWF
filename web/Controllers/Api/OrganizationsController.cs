@@ -15,12 +15,12 @@ using DomainLayer.Contact;
 using DomainLayer.Identity;
 using web.Models;
 
-namespace web.Controllers.Api
+namespace web.Controllers
 {
     [Authorize]
-    public class OrganizationsController : ApiController
+    public class ApiOrganizationsController : ApiController
     {
-        public OrganizationsController(
+        public ApiOrganizationsController(
             IQueryManager<IOrganization> organizationQM,
             IRecordManager<IOrganization, IAppUser> organizationRM
             )
@@ -29,14 +29,14 @@ namespace web.Controllers.Api
             this.organizationRM = organizationRM;
         }
 
-        // GET: api/ApiContacts
+        // GET: api/ApiOrganizations
         [AllowAnonymous]
         public IHttpActionResult Get()
         {
             return Ok(GetViewModel());
         }
 
-        // GET: api/ApiContacts/5
+        // GET: api/ApiOrganizations/5
         [AllowAnonymous]
         public IHttpActionResult Get(string id)
         {
@@ -56,7 +56,7 @@ namespace web.Controllers.Api
             return NotFound();
         }
 
-        // POST: api/ApiContacts
+        // POST: api/ApiOrganizations
         public void Post([FromBody]OrganizationsViewModel organization)
         {
             if (organization != null)
@@ -90,7 +90,7 @@ namespace web.Controllers.Api
             }
         }
 
-        // PUT: api/ApiContacts/5
+        // PUT: api/ApiOrganizations/5
         // Only update the contact with id and never create new one.
         public void Put(string id, [FromBody]OrganizationsViewModel organization)
         {
@@ -108,7 +108,7 @@ namespace web.Controllers.Api
             organizationRM.UpdateAsync(ot, user_query.First());
         }
 
-        // DELETE: api/ApiContacts/5
+        // DELETE: api/ApiOrganizations/5
         public void Delete(string id)
         {
             if (id == null) return;

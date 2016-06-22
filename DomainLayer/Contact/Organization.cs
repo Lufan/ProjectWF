@@ -9,10 +9,6 @@ namespace DomainLayer.Contact
         {
             _Id = ObjectId.GenerateNewId();
         }
-
-        [BsonId]
-        public ObjectId _Id { get; set; }
-
         public string Id
         {
             get
@@ -21,7 +17,9 @@ namespace DomainLayer.Contact
             }
         }
 
-        [BsonRequired]
+        [BsonId]
+        public ObjectId _Id { get; set; }
+
         public string OrganizationName { get; set; }
 
         private IAdress _adress;

@@ -17,7 +17,6 @@ namespace DomainLayer.Identity
         {
             UserName = userName;
         }
-
         public string Id
         {
             get
@@ -28,15 +27,13 @@ namespace DomainLayer.Identity
 
         [BsonId]
         public ObjectId _Id { get; set; }
-        [BsonRequired]
+
         public string UserName { get; set; }
 
-        [BsonRequired]
         public virtual string PasswordHash { get; set; }
         public virtual string SecurityStamp { get; set; }
 
         //foreign key to the contacts collection (table) with detail contact info
-        [BsonRequired]
         public string ContactId { get; set; }
 
         //user roles for restrict access into the app

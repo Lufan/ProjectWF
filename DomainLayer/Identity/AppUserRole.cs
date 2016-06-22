@@ -11,7 +11,6 @@ namespace DomainLayer.Identity
         {
             _Id = ObjectId.GenerateNewId();
         }
-
         public string Id
         {
             get
@@ -22,6 +21,7 @@ namespace DomainLayer.Identity
 
         [BsonId]
         public ObjectId _Id { get; set; }
+
         public string Name { get; set; }
     }
 }

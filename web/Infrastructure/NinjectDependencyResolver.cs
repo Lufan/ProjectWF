@@ -43,16 +43,26 @@ namespace web.Infrastructure
             #region Query bindings
             //**************** QUERY *************** BINDINGS *****************
             //QueryStore bindings for QueryManagers
-            kernel.Bind<IQueryManager<IContact>>().To<ContactsQueryManager>();
+            kernel.Bind<IQueryManager<Contact>>().To<ContactsQueryManager>();
             kernel.Bind<IQueryManager<IOrganization>>().To<OrganizationsQueryManager>();
 
-            kernel.Bind<IDocumentQueryStore<IContact>>().To<ContactQueryStore>().InSingletonScope();
+            kernel.Bind<IDocumentQueryStore<Contact>>().To<ContactQueryStore>().InSingletonScope();
             kernel.Bind<IDocumentQueryStore<IOrganization>>().To<OrganizationQueryStore>().InSingletonScope();
+            #endregion Query bindings
+
+            #region Record bindings
+            //**************** RECORD *************** BINDINGS *****************
+            //RecordStore bindings for RecordManagers
+            kernel.Bind<IRecordManager<IContact, IAppUser>>().To<ContactsRecordManager>();
+            kernel.Bind<IRecordManager<IOrganization, IAppUser>>().To<OrganizationsRecordManager>();
+
+            kernel.Bind<IDocumentRecordStore<IContact, IAppUser>>().To<ContactRecordStore>().InSingletonScope();
+            kernel.Bind<IDocumentRecordStore<IOrganization, IAppUser>>().To<OrganizationRecordStore>().InSingletonScope();
+            #endregion Query bindings
 
             //MongoDatabase bindings for QueryStore
             //Contacts and Organizations collections placed into ContactDb database
             kernel.Bind<IContactDbContext>().To<MongoContactDbContext>().InSingletonScope();
-            #endregion Query bindings
         }
     }
 }

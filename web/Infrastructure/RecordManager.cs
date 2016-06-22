@@ -4,12 +4,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using DomainLayer.DataAccess;
 using DomainLayer.DataAccess.Record;
+using DomainLayer.Identity;
 
 namespace web.Infrastructure
 {
-    public abstract class RecordManager<TDocument, TUser> where TDocument : IDocument
+    public abstract class RecordManager<TDocument, TUser> : IRecordManager<TDocument, TUser> where TDocument : IDocument where TUser : IAppUser
     {
         private readonly IDocumentRecordStore<TDocument, TUser> _store;
 

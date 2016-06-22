@@ -3,9 +3,9 @@ using DomainLayer.Contact;
 
 namespace web.Infrastructure
 {
-    public class ContactsQueryManager : QueryManager<IContact>
+    public class ContactsQueryManager : QueryManager<Contact>
     {
-        public ContactsQueryManager(IDocumentQueryStore<IContact> store)
+        public ContactsQueryManager(IDocumentQueryStore<Contact> store)
             : base(store)
         { }
     }

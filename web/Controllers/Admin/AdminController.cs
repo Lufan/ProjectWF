@@ -12,7 +12,7 @@ using DomainLayer.Identity;
 
 namespace PresentationLayer.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         // GET: Admin

@@ -81,7 +81,7 @@ namespace UnitTests
             public string Shurname { get; set; }
         }
 
-        private QueryStore<IContact> setupQueryStore(MockDataTable<IContact> data)
+        private QueryStore<Contact> setupQueryStore(MockDataTable<IContact> data)
         {
             Mock<IDatabase> mockDb = new Mock<IDatabase>();
             mockDb.Setup(m => m.GetCollection<IContact>(It.IsAny<string>()))
@@ -91,7 +91,7 @@ namespace UnitTests
             mock.Setup(m => m.GetDatabase())
                 .Returns(mockDb.Object);
 
-            return new QueryStore<IContact>(mock.Object, "ignored argument");
+            return new QueryStore<Contact>(mock.Object, "ignored argument");
         }
 
         [TestMethod]
