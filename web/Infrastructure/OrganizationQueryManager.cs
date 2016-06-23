@@ -4,9 +4,9 @@ using DomainLayer.Contact;
 
 namespace web.Infrastructure
 {
-    public class OrganizationsQueryManager : QueryManager<IOrganization>
+    public class OrganizationsQueryManager : QueryManager<Organization>
     {
-        public OrganizationsQueryManager(IDocumentQueryStore<IOrganization> store)
+        public OrganizationsQueryManager(IDocumentQueryStore<Organization> store)
             : base(store)
         { }
     }

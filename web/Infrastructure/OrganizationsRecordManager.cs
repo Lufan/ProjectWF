@@ -4,9 +4,9 @@ using DomainLayer.DataAccess.Record;
 
 namespace web.Infrastructure
 {
-    public class OrganizationsRecordManager : RecordManager<IOrganization, IAppUser>
+    public class OrganizationsRecordManager : RecordManager<Organization, IAppUser>
     {
-        public OrganizationsRecordManager(IDocumentRecordStore<IOrganization, IAppUser> store)
+        public OrganizationsRecordManager(IDocumentRecordStore<Organization, IAppUser> store)
             : base(store)
         { }
     }

@@ -2,9 +2,12 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+using DomainLayer.DataAccess;
+
+
 namespace DomainLayer.Contact
 {
-    public sealed class Contact : IContact
+    public sealed class Contact : IDocument, IContact
     {
         public Contact()
         {
@@ -28,8 +31,8 @@ namespace DomainLayer.Contact
 
         public string Patronymic { get; set; }
 
-        private IPosition _position;
-        public IPosition Position
+        private EnPosition _position;
+        public EnPosition Position
         {
             get
             {

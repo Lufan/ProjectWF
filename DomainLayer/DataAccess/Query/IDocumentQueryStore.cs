@@ -10,7 +10,7 @@ namespace DomainLayer.DataAccess.Query
     /// Interface for read only access to the database.
     /// </summary>
     /// <typeparam name="TDocument">Document record type.</typeparam>
-    public interface IDocumentQueryStore<TDocument>
+    public interface IDocumentQueryStore<TDocument> where TDocument : IDocument
     {
         Task<TDocument> FindByIdAsync(string documentId);
 

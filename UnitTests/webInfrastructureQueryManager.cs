@@ -2,6 +2,8 @@
 using System.Linq;
 using Moq;
 
+using MongoDB.Bson;
+
 using DomainLayer.DataAccess;
 using DomainLayer.Contact;
 using DomainLayer.DataAccess.Query;
@@ -10,81 +12,16 @@ using UnitTests.TestHelpers;
 using System;
 using System.Collections.Generic;
 
+
 namespace UnitTests
 {
     [TestClass]
     public class webInfrastructureQueryManager
     {
-        internal class FakeContact : IContact
-        {
-            private IDictionary<string, string> _emails;
-            public IDictionary<string, string> Emails
-            {
-                get
-                {
-                    if (_emails == null)
-                    {
-                        _emails = new Dictionary<string, string>();
-                    }
-                    return _emails;
-                }
-                set
-                {
-                    _emails = value != null ? new Dictionary<string, string>(value) : null;
-                }
-            }
-
-            public string Id { get; set; }
-
-            public string Name { get; set; }
-
-            public string OrganizationId { get; set; }
-
-            public string Patronymic { get; set; }
-
-            private IDictionary<string, string> _phones;
-            public IDictionary<string, string> Phones
-            {
-                get
-                {
-                    if (_phones == null)
-                    {
-                        _phones = new Dictionary<string, string>();
-                    }
-                    return _phones;
-                }
-                set
-                {
-                    _phones = value != null ? new Dictionary<string, string>(value) : null;
-                }
-            }
-
-            private IPosition _position;
-            public IPosition Position
-            {
-                get
-                {
-                    if (_position == null)
-                    {
-                        _position = new EnPosition();
-                    }
-                    return _position;
-                }
-                set
-                {
-                    _position = value != null ? new EnPosition(value) : null;
-                }
-            }
-
-            public string Remarks { get; set; }
-
-            public string Shurname { get; set; }
-        }
-
-        private QueryStore<Contact> setupQueryStore(MockDataTable<IContact> data)
+        private QueryStore<Contact> setupQueryStore(MockDataTable<Contact> data)
         {
             Mock<IDatabase> mockDb = new Mock<IDatabase>();
-            mockDb.Setup(m => m.GetCollection<IContact>(It.IsAny<string>()))
+            mockDb.Setup(m => m.GetCollection<Contact>(It.IsAny<string>()))
                 .Returns(data);
 
             Mock<IDbContext> mock = new Mock<IDbContext>();
@@ -98,17 +35,19 @@ namespace UnitTests
         public void CanFindByIdContact()
         {
             //Arrange
-            var dataTable = new MockDataTable<IContact>();
-            string firstId = "1", firstName = "First", firstShurname = "FirstShur";
-            string secondId = "2", secondName = "Second", secondShurname = "SecondShur";
-            string thirdId = "3";
+            var dataTable = new MockDataTable<Contact>();
+            string firstName = "First", firstShurname = "FirstShur";
+            string secondName = "Second", secondShurname = "SecondShur";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var secondId = new ObjectId(2, 2, 2, 2);
+            var thirdId = new ObjectId(3, 3, 3, 3);
 
             dataTable.Insert(
-                new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname }
+                new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname }
                 )
                 .Wait();
             dataTable.Insert(
-                new FakeContact { Id = secondId, Name = secondName, Shurname = secondShurname }
+                new Contact { _Id = secondId, Name = secondName, Shurname = secondShurname }
                 )
                 .Wait();
 
@@ -116,16 +55,16 @@ namespace UnitTests
             var queryManager = new ContactsQueryManager(queryStore);
 
             //Act
-            var result1 = queryManager.FindByIdAsync(firstId).Result;
-            var result2 = queryManager.FindByIdAsync(secondId).Result;
-            var result3 = queryManager.FindByIdAsync(thirdId).Result;
+            var result1 = queryManager.FindByIdAsync(firstId.ToString()).Result;
+            var result2 = queryManager.FindByIdAsync(secondId.ToString()).Result;
+            var result3 = queryManager.FindByIdAsync(thirdId.ToString()).Result;
 
             //Assert
             Assert.AreEqual<string>(result1.Name, firstName, "Names must be equal.");
-            Assert.AreEqual<string>(result1.Id, firstId, "Ids must be equal.");
+            Assert.AreEqual<string>(result1.Id, firstId.ToString(), "Ids must be equal.");
             Assert.AreEqual<string>(result1.Shurname, firstShurname, "Shurnames must be equal");
             Assert.AreEqual<string>(result2.Name, secondName, "Names must be equal.");
-            Assert.AreEqual<string>(result2.Id, secondId, "Ids must be equal.");
+            Assert.AreEqual<string>(result2.Id, secondId.ToString(), "Ids must be equal.");
             Assert.AreEqual<string>(result2.Shurname, secondShurname, "Shurnames must be equal");
             Assert.AreEqual(result3, null, "Must be null.");
         }
@@ -134,22 +73,24 @@ namespace UnitTests
         public void CanFindByNameContact()
         {
             //Arrange
-            var dataTable = new MockDataTable<IContact>();
-            string firstId = "1", firstName = "First", firstShurname = "FirstShur";
-            string secondId = "2", secondName = "Second", secondShurname = "SecondShur";
-            string thirdId = "3";
+            var dataTable = new MockDataTable<Contact>();
+            string firstName = "First", firstShurname = "FirstShur";
+            string secondName = "Second", secondShurname = "SecondShur";
             string missingName = "Third";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var secondId = new ObjectId(2, 2, 2, 2);
+            var thirdId = new ObjectId(3, 3, 3, 3);
 
             dataTable.Insert(
-                new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname }
+                new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname }
                 )
                 .Wait();
             dataTable.Insert(
-                new FakeContact { Id = secondId, Name = secondName, Shurname = secondShurname }
+                new Contact { _Id = secondId, Name = secondName, Shurname = secondShurname }
                 )
                 .Wait();
             dataTable.Insert(
-                new FakeContact { Id = thirdId, Name = secondName, Shurname = firstName }
+                new Contact { _Id = thirdId, Name = secondName, Shurname = firstName }
                 )
                 .Wait();
 
@@ -179,21 +120,21 @@ namespace UnitTests
         public void CanTakeNContact()
         {
             //Arrange
-            var dataTable = new MockDataTable<IContact>();
-            string firstId = "1";
-            string secondId = "2";
-            string thirdId = "3";
+            var dataTable = new MockDataTable<Contact>();
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var secondId = new ObjectId(2, 2, 2, 2);
+            var thirdId = new ObjectId(3, 3, 3, 3);
 
             dataTable.Insert(
-                new FakeContact { Id = firstId }
+                new Contact { _Id = firstId }
                 )
                 .Wait();
             dataTable.Insert(
-                new FakeContact { Id = secondId }
+                new Contact { _Id = secondId }
                 )
                 .Wait();
             dataTable.Insert(
-                new FakeContact { Id = thirdId }
+                new Contact { _Id = thirdId }
                 )
                 .Wait();
 

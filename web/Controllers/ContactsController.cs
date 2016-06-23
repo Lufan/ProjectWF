@@ -13,7 +13,7 @@ namespace web.Controllers
     [Authorize]
     public class ContactsController : Controller
     {
-        public ContactsController(IQueryManager<IContact> contactQM, IQueryManager<IOrganization> organizationQM)
+        public ContactsController(IQueryManager<Contact> contactQM, IQueryManager<Organization> organizationQM)
         {
             this.contactQM = contactQM;
             this.organizationQM = organizationQM;
@@ -81,7 +81,7 @@ namespace web.Controllers
             return result.AsEnumerable();
         }
 
-        private IQueryManager<IContact> contactQM;
-        private IQueryManager<IOrganization> organizationQM;
+        private IQueryManager<Contact> contactQM;
+        private IQueryManager<Organization> organizationQM;
     }
 }

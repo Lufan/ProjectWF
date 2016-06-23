@@ -44,20 +44,20 @@ namespace web.Infrastructure
             //**************** QUERY *************** BINDINGS *****************
             //QueryStore bindings for QueryManagers
             kernel.Bind<IQueryManager<Contact>>().To<ContactsQueryManager>();
-            kernel.Bind<IQueryManager<IOrganization>>().To<OrganizationsQueryManager>();
+            kernel.Bind<IQueryManager<Organization>>().To<OrganizationsQueryManager>();
 
             kernel.Bind<IDocumentQueryStore<Contact>>().To<ContactQueryStore>().InSingletonScope();
-            kernel.Bind<IDocumentQueryStore<IOrganization>>().To<OrganizationQueryStore>().InSingletonScope();
+            kernel.Bind<IDocumentQueryStore<Organization>>().To<OrganizationQueryStore>().InSingletonScope();
             #endregion Query bindings
 
             #region Record bindings
             //**************** RECORD *************** BINDINGS *****************
             //RecordStore bindings for RecordManagers
-            kernel.Bind<IRecordManager<IContact, IAppUser>>().To<ContactsRecordManager>();
-            kernel.Bind<IRecordManager<IOrganization, IAppUser>>().To<OrganizationsRecordManager>();
+            kernel.Bind<IRecordManager<Contact, IAppUser>>().To<ContactsRecordManager>();
+            kernel.Bind<IRecordManager<Organization, IAppUser>>().To<OrganizationsRecordManager>();
 
-            kernel.Bind<IDocumentRecordStore<IContact, IAppUser>>().To<ContactRecordStore>().InSingletonScope();
-            kernel.Bind<IDocumentRecordStore<IOrganization, IAppUser>>().To<OrganizationRecordStore>().InSingletonScope();
+            kernel.Bind<IDocumentRecordStore<Contact, IAppUser>>().To<ContactRecordStore>().InSingletonScope();
+            kernel.Bind<IDocumentRecordStore<Organization, IAppUser>>().To<OrganizationRecordStore>().InSingletonScope();
             #endregion Query bindings
 
             //MongoDatabase bindings for QueryStore

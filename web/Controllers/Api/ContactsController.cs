@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using System.Threading.Tasks;
 
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
@@ -22,8 +22,8 @@ namespace web.Controllers
     {
         public ApiContactsController(
             IQueryManager<Contact> contactQM, 
-            IQueryManager<IOrganization> organizationQM,
-            IRecordManager<IContact, IAppUser> contactRM
+            IQueryManager<Organization> organizationQM,
+            IRecordManager<Contact, IAppUser> contactRM
             )
         {
             this.contactQM = contactQM;
@@ -40,12 +40,12 @@ namespace web.Controllers
 
         // GET: api/ApiContacts/5
         [AllowAnonymous]
-        public IHttpActionResult Get(string id)
+        public async Task<IHttpActionResult> Get(string id)
         {
             try
             {
-                var _contact = contactQM.FindByIdAsync(id);
-                var contact = _contact.Result;
+                var contact = await contactQM.FindByIdAsync(id);
+                //var contact = _contact.FirstOrDefault();
                 if (contact != null)
                 {
                     var organizationName = "";
@@ -70,7 +70,7 @@ namespace web.Controllers
                     return Ok(result);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -78,11 +78,11 @@ namespace web.Controllers
         }
 
         // POST: api/ApiContacts
-        public void Post([FromBody]ContactsViewModel contact)
+        public async Task Post([FromBody]ContactsViewModel contact)
         {
             if (contact != null)
             {
-                var ct = contactQM.FindByIdAsync(contact.Id).Result;
+                var ct = await contactQM.FindByIdAsync(contact.Id);
                 if (ct == null)
                 {
                     ct = new Contact
@@ -98,10 +98,10 @@ namespace web.Controllers
                     };
                     var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
                     if (user_query.Count() == 0) return;
-                    contactRM.CreateAsync(ct, user_query.First());
+                    await contactRM.CreateAsync(ct, user_query.First());
                 } else
                 {
-                    ct = contactQM.FindByIdAsync(contact.Id).Result;
+                    ct = await contactQM.FindByIdAsync(contact.Id);
                     if (ct == null) return;
                     ct.Name = contact.Name;
                     ct.Shurname = contact.Shurname;
@@ -115,18 +115,18 @@ namespace web.Controllers
                     var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
                     if (user_query.Count() == 0) return;
 
-                    contactRM.UpdateAsync(ct, user_query.First());
+                    await contactRM.UpdateAsync(ct, user_query.First());
                 }
             }
         }
 
         // PUT: api/ApiContacts/5
         // Only update the contact with id and never create new one.
-        public void Put(string id, [FromBody]ContactsViewModel contact)
+        public async Task Put(string id, [FromBody]ContactsViewModel contact)
         {
             if (id == null || contact == null) return;
 
-            var ct = contactQM.FindByIdAsync(id).Result;
+            var ct = await contactQM.FindByIdAsync(id);
             if (ct == null) return;
             ct.Name = contact.Name;
             ct.Shurname = contact.Shurname;
@@ -140,24 +140,24 @@ namespace web.Controllers
             var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
             if (user_query.Count() == 0) return;
 
-            contactRM.UpdateAsync(ct, user_query.First());
+            await contactRM.UpdateAsync(ct, user_query.First());
         }
 
         // DELETE: api/ApiContacts/5
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
             if (id == null) return;
-            var ct = contactQM.FindByIdAsync(id).Result;
+            var ct = await contactQM.FindByIdAsync(id);
             if (ct == null) return;
 
             var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
             if (user_query.Count() == 0) return;
 
             // TO DO - maybe best to be don't delete the contact and only mark it as deleted?
-            contactRM.DeleteAsync(ct, user_query.First());
+            await contactRM.DeleteAsync(ct, user_query.First());
         }
 
-        private IEnumerable<ContactsViewModel> GetViewModel(int count = 10, int start_pos = 0)
+        private async Task<IEnumerable<ContactsViewModel>> GetViewModel(int count = 10, int start_pos = 0)
         {
             var contacts = contactQM.TakeNAsync(count, start_pos);
             IList<ContactsViewModel> result = new List<ContactsViewModel>(count);
@@ -167,7 +167,8 @@ namespace web.Controllers
                 // TO DO - select all organization names using only one query to database 
                 if (contact.OrganizationId != null)
                 {
-                    organizationName = organizationQM.FindByIdAsync(contact.OrganizationId).Result.OrganizationName;
+                    var organization = await organizationQM.FindByIdAsync(contact.OrganizationId);
+                    organizationName = organization.OrganizationName;
                 }
                 result.Add(
                     new ContactsViewModel
@@ -188,9 +189,9 @@ namespace web.Controllers
         }
 
         private IQueryManager<Contact> contactQM;
-        private IQueryManager<IOrganization> organizationQM;
+        private IQueryManager<Organization> organizationQM;
 
-        private IRecordManager<IContact, IAppUser> contactRM;
+        private IRecordManager<Contact, IAppUser> contactRM;
 
         private UserManager<AppUser> UserManager
         {

@@ -4,7 +4,7 @@ using DomainLayer.Identity;
 
 namespace DomainLayer.Contact
 {
-    public sealed class OrganizationRecordStore : RecordStore<IOrganization, IAppUser>
+    public sealed class OrganizationRecordStore : RecordStore<Organization, IAppUser>
     {
         public OrganizationRecordStore(IContactDbContext context)
             : base(context.Create(), "Organizations")

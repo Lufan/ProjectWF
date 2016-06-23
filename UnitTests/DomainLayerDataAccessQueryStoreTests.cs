@@ -17,6 +17,7 @@ namespace UnitTests
         internal class TestPOCO : IDocument
         {
             public string Id { get; set; }
+            public MongoDB.Bson.ObjectId _Id { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
         }

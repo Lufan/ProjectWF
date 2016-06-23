@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnitTests.TestHelpers;
 
+using MongoDB.Bson;
+
 using Moq;
 
 using DomainLayer.Contact;
@@ -19,92 +21,27 @@ namespace UnitTests
     [TestClass]
     public class webInfrastructureRecordManager
     {
-        internal class FakeContact : IContact
-        {
-            private IDictionary<string, string> _emails;
-            public IDictionary<string, string> Emails
-            {
-                get
-                {
-                    if (_emails == null)
-                    {
-                        _emails = new Dictionary<string, string>();
-                    }
-                    return _emails;
-                }
-                set
-                {
-                    _emails = value != null ? new Dictionary<string, string>(value) : null;
-                }
-            }
-
-            public string Id { get; set; }
-
-            public string Name { get; set; }
-
-            public string OrganizationId { get; set; }
-
-            public string Patronymic { get; set; }
-
-            private IDictionary<string, string> _phones;
-            public IDictionary<string, string> Phones
-            {
-                get
-                {
-                    if (_phones == null)
-                    {
-                        _phones = new Dictionary<string, string>();
-                    }
-                    return _phones;
-                }
-                set
-                {
-                    _phones = value != null ? new Dictionary<string, string>(value) : null;
-                }
-            }
-
-            private IPosition _position;
-            public IPosition Position
-            {
-                get
-                {
-                    if (_position == null)
-                    {
-                        _position = new EnPosition();
-                    }
-                    return _position;
-                }
-                set
-                {
-                    _position = value != null ? new EnPosition(value) : null;
-                }
-            }
-
-            public string Remarks { get; set; }
-
-            public string Shurname { get; set; }
-        }
-
-        private RecordStore<IContact, TUser> setupRecordStore<TUser>(MockDataTable<IContact> data)
+        private RecordStore<Contact, TUser> setupRecordStore<TUser>(MockDataTable<Contact> data)
         {
             Mock<IDatabase> mockDb = new Mock<IDatabase>();
-            mockDb.Setup(m => m.GetCollection<IContact>(It.IsAny<string>()))
+            mockDb.Setup(m => m.GetCollection<Contact>(It.IsAny<string>()))
                 .Returns(data);
 
             Mock<IDbContext> mock = new Mock<IDbContext>();
             mock.Setup(m => m.GetDatabase())
                 .Returns(mockDb.Object);
 
-            return new RecordStore<IContact, TUser>(mock.Object, "ignored argument");
+            return new RecordStore<Contact, TUser>(mock.Object, "ignored argument");
         }
 
         [TestMethod]
         public void CanCreateContact()
         {
             //Arrange
-            string firstId = "1", firstName = "First", firstShurname = "FirstShurname";
-            var doc = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var dataTable = new MockDataTable<IContact>();
+            string firstName = "First", firstShurname = "FirstShurname";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var doc = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var dataTable = new MockDataTable<Contact>();
             var recordStore = setupRecordStore<IAppUser>(dataTable);
             var recordManager = new ContactsRecordManager(recordStore);
             
@@ -113,16 +50,17 @@ namespace UnitTests
             
             //Assert
             Assert.AreEqual(1, dataTable.GetCollection().Count(), "Must be only one object.");
-            Assert.AreEqual(doc, dataTable.FindOneById(firstId).Result, "Stored and retrived objects must be equal.");
+            Assert.AreEqual(doc, dataTable.FindOneById(firstId.ToString()).Result, "Stored and retrived objects must be equal.");
         }
 
         [TestMethod]
         public void CanDeleteContact()
         {
             //Arrange
-            string firstId = "1", firstName = "First", firstShurname = "FirstShurname";
-            var doc = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var dataTable = new MockDataTable<IContact>();
+            string firstName = "First", firstShurname = "FirstShurname";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var doc = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var dataTable = new MockDataTable<Contact>();
             var recordStore = setupRecordStore<IAppUser>(dataTable);
             var recordManager = new ContactsRecordManager(recordStore);
             recordManager.CreateAsync(doc, new AppUser()).Wait();
@@ -143,11 +81,12 @@ namespace UnitTests
         public void CanDeleteSeveralContacts()
         {
             //Arrange
-            string firstId = "1", firstName = "First", firstShurname = "FirstShurname";
-            var doc1 = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var doc2 = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var doc3 = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var dataTable = new MockDataTable<IContact>();
+            string firstName = "First", firstShurname = "FirstShurname";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var doc1 = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var doc2 = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var doc3 = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var dataTable = new MockDataTable<Contact>();
 
             dataTable.Insert(doc1).Wait();
             dataTable.Insert(doc2).Wait();
@@ -172,12 +111,13 @@ namespace UnitTests
         public void CanUpdateDocument()
         {
             //Arrange
-            string firstId = "1", firstName = "First", firstShurname = "FirstShurname";
-            string secondId = "2";
+            string firstName = "First", firstShurname = "FirstShurname";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var secondId = new ObjectId(2, 2, 2, 2);
             string updateName = "New Name";
-            var doc1 = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var doc2 = new FakeContact { Id = secondId };
-            var dataTable = new MockDataTable<IContact>();
+            var doc1 = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var doc2 = new Contact { _Id = secondId };
+            var dataTable = new MockDataTable<Contact>();
             dataTable.Insert(doc1).Wait();
             var recordStore = setupRecordStore<IAppUser>(dataTable);
 
@@ -194,7 +134,7 @@ namespace UnitTests
             Assert.AreEqual(updateName,
                 dataTable.
                 GetCollection().
-                FirstOrDefault(d => d.Id.Equals(firstId)).
+                FirstOrDefault(d => d.Id.Equals(firstId.ToString())).
                 Name, "Name must be updated.");
         }
 
@@ -202,14 +142,17 @@ namespace UnitTests
         public void CanUpdateFieldsDocument()
         {
             //Arrange
-            string firstId = "1", firstName = "First", firstShurname = "first description";
-            string secondId = "2", secondName = "Second", secondShurname = "second description";
-            string thirdId = "3", thirdName = "Third", thirdShurname = "third description";
+            string firstName = "First", firstShurname = "first description";
+            string secondName = "Second", secondShurname = "second description";
+            string thirdName = "Third", thirdShurname = "third description";
+            var firstId = new ObjectId(1, 1, 1, 1);
+            var secondId = new ObjectId(2, 2, 2, 2);
+            var thirdId = new ObjectId(3, 3, 3, 3);
             string updateName = "New Name";
-            var doc1 = new FakeContact { Id = firstId, Name = firstName, Shurname = firstShurname };
-            var doc2 = new FakeContact { Id = secondId, Name = secondName, Shurname = secondShurname };
-            var doc3 = new FakeContact { Id = thirdId, Name = thirdName, Shurname = thirdShurname };
-            var dataTable = new MockDataTable<IContact>();
+            var doc1 = new Contact { _Id = firstId, Name = firstName, Shurname = firstShurname };
+            var doc2 = new Contact { _Id = secondId, Name = secondName, Shurname = secondShurname };
+            var doc3 = new Contact { _Id = thirdId, Name = thirdName, Shurname = thirdShurname };
+            var dataTable = new MockDataTable<Contact>();
             dataTable.Insert(doc1).Wait();
             dataTable.Insert(doc2).Wait();
             dataTable.Insert(doc3).Wait();

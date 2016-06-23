@@ -36,7 +36,7 @@ namespace DomainLayer.DataAccess.MongoDb
 
         public async Task<TDocument> FindOneById(string id)
         {
-            var result = await this.Find<string>((doc) => doc.Id, id);
+            var result = await this.Find<ObjectId>((doc) => doc._Id, new ObjectId(id));
             if (result == null) return default(TDocument);
             return result.FirstOrDefault();
         }
@@ -47,8 +47,9 @@ namespace DomainLayer.DataAccess.MongoDb
             )
         {
             var query = Builders<TDocument>.Filter.Eq(expression, value);
-            var result = await _collection.FindAsync(query);
-            return result.ToList().AsEnumerable();
+            var result = _collection.Find(query);
+            List<TDocument> list = await result.ToListAsync();
+            return list.AsEnumerable();
         }
 
         public async Task<IEnumerable<TDocument>> Find(
@@ -57,8 +58,9 @@ namespace DomainLayer.DataAccess.MongoDb
             )
         {
             var query = Builders<TDocument>.Filter.Regex(expression, new BsonRegularExpression(regex));
-            var result = await _collection.FindAsync(query);
-            return result.ToList().AsEnumerable();
+            var result = _collection.Find(query);
+            List<TDocument> list = await result.ToListAsync();
+            return list.AsEnumerable();
         }
 
         public async Task<long> Update(TDocument doc)

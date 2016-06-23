@@ -1,9 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+using DomainLayer.DataAccess;
+
 namespace DomainLayer.Contact
 {
-    public sealed class Organization : IOrganization
+    public sealed class Organization : IDocument, IOrganization
     {
         public Organization()
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using System.Threading.Tasks;
 
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
@@ -38,9 +38,9 @@ namespace web.Controllers
 
         // GET: api/ApiOrganizations/5
         [AllowAnonymous]
-        public IHttpActionResult Get(string id)
+        public async Task<IHttpActionResult> Get(string id)
         {
-            var organization = organizationQM.FindByIdAsync(id).Result;
+            var organization = await organizationQM.FindByIdAsync(id);
             if (organization != null)
             {
                 var result = new OrganizationsViewModel

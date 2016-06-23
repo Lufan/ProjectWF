@@ -16,7 +16,7 @@ namespace web.Models
 
         public string Patronymic { get; set; }
 
-        public IPosition Position { get; set; }
+        public EnPosition Position { get; set; }
 
         //<email adress, note>
         public IDictionary<string, string> Emails { get; set; }

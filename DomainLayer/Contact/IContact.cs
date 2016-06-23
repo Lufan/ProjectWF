@@ -11,7 +11,7 @@ namespace DomainLayer.Contact
 
         string Patronymic { get; set; }
 
-        IPosition Position { get; set; }
+        EnPosition Position { get; set; }
 
         //<email adress, note>
         IDictionary<string, string> Emails { get; set; }
