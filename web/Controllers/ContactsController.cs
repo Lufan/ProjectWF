@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 using web.Infrastructure;
 using DomainLayer.Contact;
@@ -26,19 +26,48 @@ namespace web.Controllers
             ViewBag.isAuthenticated = Request.IsAuthenticated;
             ViewBag.CurrentPage = "contacts";
 
-            var contacts = GetViewModel(10, 0);
-
             return View();
         }
 
         [AllowAnonymous]
-        public ActionResult Contact(string id)
+        public async Task<ActionResult> Contact(string id)
         {
+            ViewBag.CurrentPage = "contacts";
             if (id != null)
             {
-
+                ViewBag.Title = "Редактор контакта";
+                try
+                {
+                    var contact = await contactQM.FindByIdAsync(id);
+                    if (contact != null)
+                    {
+                        var organizationName = "";
+                        if (contact.OrganizationId != null)
+                        {
+                            organizationName = (await organizationQM.FindByIdAsync(contact.OrganizationId)).OrganizationName;
+                        }
+                        var result = new ContactsViewModel
+                        {
+                            Id = contact.Id,
+                            Name = contact.Name,
+                            Shurname = contact.Shurname,
+                            Patronymic = contact.Patronymic,
+                            Emails = contact.Emails,
+                            Phones = contact.Phones,
+                            OrganizationId = contact.OrganizationId,
+                            OrganizationName = organizationName,
+                            Position = contact.Position,
+                            Remarks = contact.Remarks
+                        };
+                        return View(result);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    return HttpNotFound(ex.ToString());
+                }
             }
-            ViewBag.CurrentPage = "contacts";
+            ViewBag.Title = "Новый контакт";
             return View();
         }
 
@@ -47,38 +76,7 @@ namespace web.Controllers
         public ActionResult Contact(ContactsViewModel model)
         {
             //TO DO - validate and save data
-            ViewBag.CurrentPage = "contacts";
-            return Redirect("Index");
-        }
-
-        private IEnumerable<ContactsViewModel> GetViewModel(int count = 10, int start_pos = 0)
-        {
-            var contacts = contactQM.TakeNAsync(count, start_pos);
-            IList<ContactsViewModel> result = new List<ContactsViewModel>(count);
-            foreach (var contact in contacts.Result)
-            {
-                var organizationName = "";
-                // TO DO - select all names using only one query to database 
-                if (contact.OrganizationId != null)
-                {
-                    organizationName = organizationQM.FindByIdAsync(contact.OrganizationId).Result.OrganizationName;
-                }
-                result.Add(
-                    new ContactsViewModel
-                    {
-                        Id = contact.Id,
-                        Name = contact.Name,
-                        Shurname = contact.Shurname,
-                        Patronymic = contact.Patronymic,
-                        Emails = contact.Emails,
-                        Phones = contact.Phones,
-                        OrganizationId = contact.OrganizationId,
-                        OrganizationName = organizationName,
-                        Position = contact.Position,
-                        Remarks = contact.Remarks
-                    });
-            }
-            return result.AsEnumerable();
+            return Redirect("/");
         }
 
         private IQueryManager<Contact> contactQM;

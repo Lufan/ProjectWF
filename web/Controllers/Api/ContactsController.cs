@@ -72,7 +72,7 @@ namespace web.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.ToString());
             }
             return NotFound();
         }
@@ -111,11 +111,16 @@ namespace web.Controllers
                     ct.OrganizationId = contact.OrganizationId;
                     ct.Position = contact.Position;
                     ct.Remarks = contact.Remarks;
+                    try
+                    {
+                        var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
+                        if (user_query.Count() == 0) return;
 
-                    var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
-                    if (user_query.Count() == 0) return;
-
-                    await contactRM.UpdateAsync(ct, user_query.First());
+                        await contactRM.UpdateAsync(ct, user_query.First());
+                    } catch (Exception ex)
+                    {
+                        string res = ex.ToString();
+                    }
                 }
             }
         }
@@ -197,7 +202,9 @@ namespace web.Controllers
         {
             get
             {
-                return Request.GetOwinContext().GetUserManager<UserManager<AppUser>>();
+                var context = Request.GetOwinContext();
+                var manager = context.GetUserManager<AppUserManager>();
+                return manager;
             }
         }
     }

@@ -65,7 +65,7 @@ namespace DomainLayer.DataAccess.MongoDb
 
         public async Task<long> Update(TDocument doc)
         {
-            var result = await _collection.ReplaceOneAsync<TDocument>(s => s.Id == doc.Id, doc);
+            var result = await _collection.ReplaceOneAsync<TDocument>(s => s._Id == doc._Id, doc);
             return result.ModifiedCount;
         }
 

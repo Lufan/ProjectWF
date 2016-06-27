@@ -6,12 +6,14 @@
     ViewBag.Title = "Справочник контактов";
 }
 <script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/angular-ui/ui-bootstrap.js"></script>
+<script src="~/Scripts/angular-ui/ui-bootstrap-tpls.js"></script>
 <script src="~/Scripts/appContactsManager.js"></script>
 
 <div class="container" data-ng-app="AppContactsManager">
-    <div class="panel panel-info">
+    <div class="panel panel-info" data-ng-controller="ContactsCtrl">
         <div class="panel-heading">Контакты</div>
-        <table class="table table-striped table-responsive" data-ng-controller="ContactsCtrl">
+        <table class="table table-striped table-responsive">
             <caption>
                 @Html.ActionLink("Добавить...", "New", null, new { @class = "btn btn-default pull-right" + (@Request.IsAuthenticated ? " " : " disabled") })
                 <div class="input-group pull-left">
@@ -58,17 +60,56 @@
             <tbody>
                 
                 <tr data-ng-repeat="contact in contacts | filter : search_pattern">
-                    <td><a href="/Contacts/Contact/{{contact.Id}}">{{contact.Shurname}}</a></td>
-                    <td><a href="/Contacts/Contact/{{contact.Id}}">{{contact.Name}}</a></td>
-                    <td><a href="/Contacts/Contact/{{contact.Id}}">{{contact.Patronymic}}</a></td>
+                    <td>
+                        <a href="#" data-id="{{contact.Id}}" data-ng-click="openContact($event)">{{contact.Shurname}}</a>
+                    </td>
+                    <td>
+                        <a href="#" data-id="{{contact.Id}}" data-ng-click="openContact($event)">{{contact.Name}}</a>
+                    </td>
+                    <td>
+                        <a href="#" data-id="{{contact.Id}}" data-ng-click="openContact($event)">{{contact.Patronymic}}</a>
+                    </td>
                     <td>
                         <small data-ng-repeat="phone in contact.phones">{{phone.Value + "; "}}</small>
                     </td>
-                    <td><a href="/Organization/Organizations/{{contact.OrganizationId}}">{{contact.OrganizationName}}</a></td>
+                    <td>
+                        <a href="#" data-id="{{contact.OrganizationId}}" data-ng-click="openOrganization($event)">{{contact.OrganizationName}}</a>
+                    </td>
                     <td></td>
                 </tr>
 
             </tbody>
+        
         </table>
+        <script type="text/ng-template" id="editContactForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Контактная информация</h3>
+            </div>
+            <div class="modal-body">
+                <form novalidate role="form">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="name">Имя: </label>
+                        <input id="name" type="text" data-ng-model="contact.Name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="shurname">Фамилия: </label>
+                        <input id="shurname" type="text" data-ng-model="contact.Shurname" class="form-control" /><br />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="patronymic">Отчество: </label>
+                        <input id="patronymic" type="text" data-ng-model="contact.Patronymic" class="form-control" /><br />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">E-mail: </label>
+                        <input id="email" type="email" data-ng-model="contact.email" class="form-control" /><br />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-ng-click="ok()">Сохранить</button>
+                <button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
+            </div>
+        </script>
+
     </div>
 </div>
