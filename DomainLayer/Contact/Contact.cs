@@ -48,39 +48,39 @@ namespace DomainLayer.Contact
             }
         }
 
-        private IDictionary<string, string> _emails;
-        //<email adress, note>
-        public IDictionary<string, string> Emails
+        private IList<string> _emails;
+        //<email adress>
+        public IList<string> Emails
         {
             get
             {
                 if (_emails == null)
                 {
-                    _emails = new Dictionary<string, string>();
+                    _emails = new List<string>();
                 }
                 return _emails;
             }
             set
             {
-                _emails = value != null ? new Dictionary<string, string>(value) : null;
+                _emails = value != null ? new List<string>(value) : null;
             }
         }
 
-        private IDictionary<string, string> _phones;
-        //<phone number, note>
-        public IDictionary<string, string> Phones
+        private IList<string> _phones;
+        //<phone number>
+        public IList<string> Phones
         {
             get
             {
                 if (_phones == null)
                 {
-                    _phones = new Dictionary<string, string>();
+                    _phones = new List<string>();
                 }
                 return _phones;
             }
             set
             {
-                _phones = value != null ? new Dictionary<string, string>(value) : null;
+                _phones = value != null ? new List<string>(value) : null;
             }
         }
 

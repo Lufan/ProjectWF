@@ -19,9 +19,9 @@ namespace web.Models
         public EnPosition Position { get; set; }
 
         //<email adress, note>
-        public IDictionary<string, string> Emails { get; set; }
+        public IList<string> Emails { get; set; }
 
-        public IDictionary<string, string> Phones { get; set; }
+        public IList<string> Phones { get; set; }
 
         //reference to the Organization collection
         public string OrganizationName { get; set; }
