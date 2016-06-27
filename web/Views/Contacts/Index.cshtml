@@ -99,12 +99,9 @@
                         <label class="control-label col-sm-2" for="patronymic">Отчество: </label>
                         <input id="patronymic" type="text" data-ng-model="contact.Patronymic" class="form-control" /><br />
                     </div>
-                    <div class="form-group" data-ng-repeat="email in contact.emails">
-                        <label class="control-label col-sm-2" for="{{'email' + $index}}">E-mail: </label>
-                        <input id="{{'email' + $index}}" type="email" data-ng-model="contact.email" class="form-control" />
-                        <label class="control-label col-sm-2" for="{{'email_remark' + $index}}">Примечание: </label>
-                        <input id="{{'email_remark' + $index}}" type="email" data-ng-model="contact.email" class="form-control" value="{{email.}}"/>
-                        <br />
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">E-mail: </label>
+                        <input id="email" type="email" data-ng-model="contact.email" class="form-control" /><br />
                     </div>
                 </form>
             </div>
