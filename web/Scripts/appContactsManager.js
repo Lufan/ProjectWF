@@ -1,5 +1,10 @@
 ﻿(function () {
     var app = angular.module('AppContactsManager', ['ui.bootstrap']);
+    app.config(['$compileProvider', function( $compileProvider )
+        {   
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|callto):/);
+        }
+    ]);
     app.controller('ContactsCtrl', function ($scope, $http, $filter, $uibModal, $log) {
         
         $http({

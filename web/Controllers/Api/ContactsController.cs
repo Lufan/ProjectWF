@@ -35,7 +35,8 @@ namespace web.Controllers
         [AllowAnonymous]
         public IHttpActionResult Get()
         {
-            return Ok(GetViewModel());
+            var result = GetViewModel();
+            return Ok(result);
         }
 
         // GET: api/ApiContacts/5

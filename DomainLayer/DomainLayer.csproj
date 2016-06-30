@@ -65,6 +65,7 @@
     <Compile Include="Contact\Contact.cs" />
     <Compile Include="Contact\ContactQueryStore.cs" />
     <Compile Include="Contact\ContactRecordStore.cs" />
+    <Compile Include="Contact\Email.cs" />
     <Compile Include="Contact\IAdress.cs" />
     <Compile Include="Contact\IContact.cs" />
     <Compile Include="Contact\IContactDbContext.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Contact\Organization.cs" />
     <Compile Include="Contact\OrganizationQueryStore.cs" />
     <Compile Include="Contact\OrganizationRecordStore.cs" />
+    <Compile Include="Contact\Phone.cs" />
     <Compile Include="DataAccess\IDatabase.cs" />
     <Compile Include="DataAccess\IDataTable.cs" />
     <Compile Include="DataAccess\IDbContext.cs" />

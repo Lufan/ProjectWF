@@ -14,10 +14,10 @@ namespace DomainLayer.Contact
         EnPosition Position { get; set; }
 
         //<email adress, note>
-        IDictionary<string, string> Emails { get; set; }
+        IEnumerable<Email> Emails { get; set; }
 
         //<phone number, note>
-        IDictionary<string, string> Phones { get; set; }
+        IEnumerable<Phone> Phones { get; set; }
 
         //reference to the Organization collection
         string OrganizationId { get; set; }

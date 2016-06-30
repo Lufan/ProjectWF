@@ -1,8 +1,4 @@
-﻿@using web.Models
- 
-@model IEnumerable<ContactsViewModel>
-
-@{
+﻿@{
     ViewBag.Title = "Справочник контактов";
 }
 <script src="~/Scripts/angular.js"></script>
@@ -10,15 +6,15 @@
 <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.js"></script>
 <script src="~/Scripts/appContactsManager.js"></script>
 
-<div class="container" data-ng-app="AppContactsManager">
-    <div class="panel panel-info" data-ng-controller="ContactsCtrl">
+<div class="container" ng-app="AppContactsManager">
+    <div class="panel panel-info" ng-controller="ContactsCtrl">
         <div class="panel-heading">Контакты</div>
         <table class="table table-striped table-responsive">
             <caption>
                 @Html.ActionLink("Добавить...", "New", null, new { @class = "btn btn-default pull-right" + (@Request.IsAuthenticated ? " " : " disabled") })
                 <div class="input-group pull-left">
                     Поиск по контактам:
-                    <input class="input-sm" type="text" data-ng-model="search_pattern" autofocus />
+                    <input class="input-sm" type="text" ng-model="search_pattern" autofocus />
                 </div>
             </caption>
             <colgroup>
@@ -58,28 +54,30 @@
                 </tr>
             </thead>
             <tbody>
-                
-                <tr data-ng-repeat="contact in contacts | filter : search_pattern">
+
+                <tr ng-repeat="contact in contacts | filter : search_pattern">
                     <td>
-                        <a href="#" data-id="{{contact.Id}}" data-ng-click="openContact($event)">{{contact.Shurname}}</a>
+                        <a href="#" data-id="{{contact.Id}}" ng-click="openContact($event)">{{contact.Shurname}}</a>
                     </td>
                     <td>
-                        <a href="#" data-id="{{contact.Id}}" data-ng-click="openContact($event)">{{contact.Name}}</a>
+                        <a href="#" data-id="{{contact.Id}}" ng-click="openContact($event)">{{contact.Name}}</a>
                     </td>
                     <td>
-                        <a href="#" data-id="{{contact.Id}}" data-ng-click="openContact($event)">{{contact.Patronymic}}</a>
+                        <a href="#" data-id="{{contact.Id}}" ng-click="openContact($event)">{{contact.Patronymic}}</a>
                     </td>
                     <td>
-                        <small data-ng-repeat="phone in contact.phones">{{phone.Value + "; "}}</small>
+                        <a href="callto:{{phone.Number}}" ng-repeat="phone in contact.Phones">{{phone.Number}}</a>
                     </td>
                     <td>
-                        <a href="#" data-id="{{contact.OrganizationId}}" data-ng-click="openOrganization($event)">{{contact.OrganizationName}}</a>
+                        <a href="#" data-id="{{contact.OrganizationId}}" ng-click="openOrganization($event)">{{contact.OrganizationName}}</a>
                     </td>
-                    <td></td>
+                    <td>
+                        <a href="mailto:{{email.Address}}" ng-repeat="email in contact.Emails">{{email.Address}}</a>
+                    </td>
                 </tr>
 
             </tbody>
-        
+
         </table>
         <script type="text/ng-template" id="editContactForm.html">
             <div class="modal-header">
@@ -87,26 +85,81 @@
             </div>
             <div class="modal-body">
                 <form novalidate role="form">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="name">Имя: </label>
-                        <input id="name" type="text" data-ng-model="contact.Name" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="shurname">Фамилия: </label>
-                        <input id="shurname" type="text" data-ng-model="contact.Shurname" class="form-control" /><br />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="patronymic">Отчество: </label>
-                        <input id="patronymic" type="text" data-ng-model="contact.Patronymic" class="form-control" /><br />
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="email">E-mail: </label>
-                        <input id="email" type="email" data-ng-model="contact.email" class="form-control" /><br />
-                    </div>
+                    <fieldset>
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label class="control-label col-sm-2" for="shurname">Фамилия: </label>
+                                <input id="shurname" type="text" ng-model="contact.Shurname" class="form-control" /><br />
+                            </div>
+                        
+                            <div class="form-group col-sm-4">
+                                <label class="control-label col-sm-2" for="name">Имя: </label>
+                                <input id="name" type="text" ng-model="contact.Name" class="form-control" />
+                            </div>
+                        
+                            <div class="form-group col-sm-4">
+                                <label class="control-label col-sm-2" for="patronymic">Отчество: </label>
+                                <input id="patronymic" type="text" ng-model="contact.Patronymic" class="form-control" /><br />
+                            </div>
+                        </div>
+                        <!-- Phones -->
+                        <div class="row" ng-repeat="phone in contact.Phones">
+                            <div class="form-group col-sm-4">
+                                <label class="control-label">Тип телефона: </label>
+                                <input class="form-control col-sm-4" type="text" ng-model="contact.Phones[$index].Description" ng-required value="{{phone.Description}}" />
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label class="control-label">Номер телефона: </label>
+                                <input class="form-control col-sm-4" type="text" ng-model="contact.Phones[$index].Number" ng-required value="{{phone.Number}}" />
+                            </div>
+                            <div class="form-group col-sm-1" ng-show="{{$index !== 0}}">
+                                <label class="control-label invisible hidden-xs">Закрыть</label>
+                                <div class="btn btn-default" ng-click="removePhoneInput($index)"><span class="glyphicon glyphicon-minus"></span></div>
+                            </div>
+                            <div class="form-group col-sm-1">
+                                <label class="control-label">Добавить</label>
+                                <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" ng-click="addPhoneInput()"><span class="glyphicon glyphicon-plus"></span></div>
+                            </div>
+                        </div>
+                        <!-- Emails -->
+                        <div class="row" ng-repeat="email in contact.Emails">
+                            <div class="form-group col-sm-4">
+                                <label class="control-label">Тип email: </label>
+                                <input class="form-control col-sm-4" type="text" ng-model="contact.Emails[$index].Description" ng-required value="{{email.Description}}" />
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label class="control-label">Электронный адрес: </label>
+                                <input class="form-control col-sm-4" type="text" ng-model="contact.Emails[$index].Address" ng-required value="{{email.Address}}" />
+                            </div>
+                            <div class="form-group col-sm-1" ng-show="{{$index !== 0}}">
+                                <label class="control-label invisible hidden-xs">Закрыть</label>
+                                <div class="btn btn-default" ng-click="removeEmailInput($index)"><span class="glyphicon glyphicon-minus"></span></div>
+                            </div>
+                            <div class="form-group col-sm-1">
+                                <label class="control-label">Добавить:</label>
+                                <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" ng-click="addEmailInput()"><span class="glyphicon glyphicon-plus"></span></div>
+                            </div>
+                        </div>
+                        <!-- Organization -->
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label class="control-label">Организация: </label>
+                                <text class="form-control col-sm-4" type="text" ng-model="contact.OrganizationName" ng-required value="{{contact.OrganizationName}}" />
+                            </div>
+                            <div class="form-group col-sm-4 hidden">
+                                <label class="control-label">Id: </label>
+                                <input class="form-control col-sm-4" type="text" ng-model="contact.OrganizationId" ng-required value="{{contact.OrganizationId}}" />
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label class="control-label">Изменить организацию:</label>
+                                <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" ng-click="selectOrganization(contact.OrganizationId)"><span class="glyphicon glyphicon-search"></span></div>
+                            </div>
+                        </div>
+                    </fieldset>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-ng-click="ok()">Сохранить</button>
+                <button class="btn btn-primary @(@Request.IsAuthenticated ? " " : " hidden")" type="button" data-ng-click="ok()">Сохранить</button>
                 <button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
             </div>
         </script>
