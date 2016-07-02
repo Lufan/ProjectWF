@@ -48,7 +48,8 @@ namespace DomainLayer.DataAccess.MongoDb
         {
             var query = Builders<TDocument>.Filter.Eq(expression, value);
             var result = _collection.Find(query);
-            List<TDocument> list = await result.ToListAsync();
+            // TO DO: change to async (now dont work)
+            List<TDocument> list = result.ToListAsync().Result;
             return list.AsEnumerable();
         }
 

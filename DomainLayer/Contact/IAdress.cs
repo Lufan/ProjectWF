@@ -14,7 +14,10 @@ namespace DomainLayer.Contact
 
         IList<string> AdressLines { get; set; }
 
+        //<email adress, note>
+        IEnumerable<Email> Emails { get; set; }
+
         //<phone number, note>
-        IDictionary<string, string> Phones { get; set; }
+        IEnumerable<Phone> Phones { get; set; }
     }
 }

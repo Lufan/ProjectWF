@@ -5,17 +5,40 @@
             $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|callto):/);
         }
     ]);
-    app.controller('ContactsCtrl', function ($scope, $http, $filter, $uibModal, $log) {
-        
-        $http({
-            method: "GET",
-            url: "/api/ApiContacts/"
-        }).then(function mySucces(response) {
-            $scope.contacts = response.data["Result"];
-            $scope.query_result = response.statusText;
-        }, function myError(response) {
-            $scope.contacts = [];
-            $scope.query_result = response.statusText;
+    app.factory('getContactsService', function ($http) {
+
+        var getData = function () {
+            return $http({
+                method: "GET",
+                url: "/api/ApiContacts/"
+            }).then(function mySucces(response) {
+                return response.data["Result"];
+            }, function myError(response) {
+                return [];
+            });
+        };
+        return { getData: getData };
+    });
+    app.factory('getOrganizationsService', function ($http) {
+
+        var getData = function () {
+            return $http({
+                method: "GET",
+                url: "/api/ApiOrganizations/"
+            }).then(function mySucces(response) {
+                return response.data["Result"];
+            }, function myError(response) {
+                return [];
+            });
+        };
+        return { getData: getData };
+    });
+
+    app.controller('ContactsCtrl', function ($scope, $http, $filter, $uibModal, $log, getContactsService) {
+
+        var ContactPromise = getContactsService.getData();
+        ContactPromise.then(function (result) {
+            $scope.contacts = result;
         });
 
         $scope.animationsEnabled = true;
@@ -56,45 +79,64 @@
                 $log.info('Modal dismissed at: ' + new Date());
             });
         };
-
-        $scope.openOrganization = function (id) {
-            // TO DO - Not implemented yet
-            var user = {};
-            for (var i = 0; i < $scope.contacts.length; i++) {
-                if ($scope.contacts[i].Id === id) {
-                    user = $scope.contacts[i];
-                    break;
-                }
-            }
-            var modalInstance = $uibModal.open({
-                animation: $scope.animationsEnabled,
-                templateUrl: 'editContactForm.html',
-                controller: 'ModalInstanceCtrl',
-                size: "lg",
-                resolve: {
-                    user: function () {
-                        return user;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-        };
-
+        
         $scope.toggleAnimation = function () {
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
     });
-    app.controller('ModalContactCtrl', function ($scope, $uibModalInstance, contact) {
+    app.controller('ModalContactCtrl', function ($scope, $uibModalInstance, $http, $filter, $uibModal, $log, contact) {
 
         $scope.contact = contact;
 
         $scope.ok = function () {
             $uibModalInstance.close(contact.Id);
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+        $scope.selectOrganization = function (event) {
+            var id = $(event.target).attr("data-id");
+            
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'selectOrganizationForm.html',
+                controller: 'ModalOrganizationCtrl',
+                size: "md",
+                resolve: {
+                    id: function () {
+                        return id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (orgSelected) {
+                contact.OrganizationName = orgSelected.OrganizationName;
+                contact.OrganizationId = orgSelected.Id;
+                $log.info('Result Ok at:' + new Date());
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+    });
+    app.controller('ModalOrganizationCtrl', function ($scope, $uibModalInstance, $log, getOrganizationsService, id) {
+
+        var OrganizationPromise = getOrganizationsService.getData();
+        OrganizationPromise.then(function (result) {
+            $scope.organizations = result;
+            $scope.orgSelected = {};
+            for (var i = 0; i < $scope.organizations.length; i++) {
+                if ($scope.organizations[i].Id === id) {
+                    $scope.orgSelected = $scope.organizations[i];
+                    break;
+                }
+            }
+        });
+
+        $scope.ok = function () {
+            $log.info('Result Ok at: org name = ' + $scope.orgSelected.OrganizationName);
+            $uibModalInstance.close($scope.orgSelected);
         };
 
         $scope.cancel = function () {

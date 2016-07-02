@@ -45,20 +45,39 @@ namespace DomainLayer.Contact
             }
         }
 
-        private IDictionary<string, string> _phones;
-        public IDictionary<string, string> Phones
+        private IEnumerable<Email> _emails;
+        //<email adress, note>
+        public IEnumerable<Email> Emails
+        {
+            get
+            {
+                if (_emails == null)
+                {
+                    _emails = new List<Email>();
+                }
+                return _emails;
+            }
+            set
+            {
+                _emails = value != null ? new List<Email>(value) : null;
+            }
+        }
+
+        private IEnumerable<Phone> _phones;
+        //<phone number, note>
+        public IEnumerable<Phone> Phones
         {
             get
             {
                 if (_phones == null)
                 {
-                    _phones = new Dictionary<string, string>();
+                    _phones = new List<Phone>();
                 }
                 return _phones;
             }
             set
             {
-                _phones = value != null ? new Dictionary<string, string>(value) : null;
+                _phones = value != null ? new List<Phone>(value) : null;
             }
         }
     }

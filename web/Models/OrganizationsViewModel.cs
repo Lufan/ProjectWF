@@ -8,7 +8,7 @@ namespace web.Models
 
         public string OrganizationName { get; set; }
 
-        public IAdress Adress { get; set; }
+        public Adress Adress { get; set; }
 
         public string Remarks { get; set; }
     }

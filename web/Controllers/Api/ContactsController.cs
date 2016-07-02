@@ -165,9 +165,9 @@ namespace web.Controllers
 
         private async Task<IEnumerable<ContactsViewModel>> GetViewModel(int count = 10, int start_pos = 0)
         {
-            var contacts = contactQM.TakeNAsync(count, start_pos);
+            var contacts = await contactQM.TakeNAsync(count, start_pos);
             IList<ContactsViewModel> result = new List<ContactsViewModel>(count);
-            foreach (var contact in contacts.Result)
+            foreach (var contact in contacts)
             {
                 var organizationName = "";
                 // TO DO - select all organization names using only one query to database 

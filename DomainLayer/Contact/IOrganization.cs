@@ -6,7 +6,7 @@ namespace DomainLayer.Contact
     {
         string OrganizationName { get; set; }
 
-        IAdress Adress { get; set; }
+        Adress Adress { get; set; }
 
         string Remarks { get; set; }
     }

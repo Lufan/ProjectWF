@@ -24,8 +24,8 @@ namespace DomainLayer.Contact
 
         public string OrganizationName { get; set; }
 
-        private IAdress _adress;
-        public IAdress Adress
+        private Adress _adress;
+        public Adress Adress
         {
             get
             {

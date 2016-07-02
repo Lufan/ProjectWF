@@ -144,15 +144,17 @@
                         <div class="row">
                             <div class="form-group col-sm-4">
                                 <label class="control-label">Организация: </label>
-                                <text class="form-control col-sm-4" type="text" ng-model="contact.OrganizationName" ng-required value="{{contact.OrganizationName}}" />
+                                <text class="form-control col-sm-4" type="text" ng-model="contact.OrganizationName" ng-required value="{{contact.OrganizationName}}">
+									{{contact.OrganizationName}}
+								</text>
                             </div>
                             <div class="form-group col-sm-4 hidden">
                                 <label class="control-label">Id: </label>
                                 <input class="form-control col-sm-4" type="text" ng-model="contact.OrganizationId" ng-required value="{{contact.OrganizationId}}" />
                             </div>
                             <div class="form-group col-sm-4">
-                                <label class="control-label">Изменить организацию:</label>
-                                <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" ng-click="selectOrganization(contact.OrganizationId)"><span class="glyphicon glyphicon-search"></span></div>
+                                <label class="control-label">Выбрать организацию:</label>
+                                <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" data-id="{{contact.OrganizationId}}" ng-click="selectOrganization($event)"><span class="glyphicon glyphicon-search"></span></div>
                             </div>
                         </div>
                     </fieldset>
@@ -164,5 +166,32 @@
             </div>
         </script>
 
+		<script type="text/ng-template" id="selectOrganizationForm.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Выбор организации</h3>
+            </div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="form-group">
+				        <label class="control-label">Поиск по организациям:</label>
+				        <input class="form-control col-sm-4" type="text" ng-model="search_pattern_org" autofocus />
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<select ng-options="o.OrganizationName for o in organizations track by o.Id | filter : search_pattern_org" ng-model="orgSelected"></select>
+						<!--
+						<select class="form-control col-sm-4" name="Organizations" ng-model="orgSelected">
+							<option ng-repeat="organization in organizations | filter : search_pattern_org" value="{{organization.Id}}">{{organization.OrganizationName}}</option>
+						</select>
+						-->
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" type="button" data-ng-click="ok()">Выбрать</button>
+				<button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
+			</div>
+		</script>
     </div>
 </div>

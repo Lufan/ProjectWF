@@ -21,8 +21,8 @@ namespace web.Controllers
     public class ApiOrganizationsController : ApiController
     {
         public ApiOrganizationsController(
-            IQueryManager<IOrganization> organizationQM,
-            IRecordManager<IOrganization, IAppUser> organizationRM
+            IQueryManager<Organization> organizationQM,
+            IRecordManager<Organization, IAppUser> organizationRM
             )
         {
             this.organizationQM = organizationQM;
@@ -33,7 +33,8 @@ namespace web.Controllers
         [AllowAnonymous]
         public IHttpActionResult Get()
         {
-            return Ok(GetViewModel());
+            var result = GetViewModel();
+            return Ok(result);
         }
 
         // GET: api/ApiOrganizations/5
@@ -122,11 +123,11 @@ namespace web.Controllers
             organizationRM.DeleteAsync(ot, user_query.First());
         }
 
-        private IEnumerable<OrganizationsViewModel> GetViewModel(int count = 10, int start_pos = 0)
+        private async Task<IEnumerable<OrganizationsViewModel>> GetViewModel(int count = 10, int start_pos = 0)
         {
-            var organizations = organizationQM.TakeNAsync(count, start_pos);
+            var organizations = await organizationQM.TakeNAsync(count, start_pos);
             IList<OrganizationsViewModel> result = new List<OrganizationsViewModel>(count);
-            foreach (var organization in organizations.Result)
+            foreach (var organization in organizations)
             {
                 result.Add(
                     new OrganizationsViewModel
@@ -140,8 +141,8 @@ namespace web.Controllers
             return result.AsEnumerable();
         }
         
-        private IQueryManager<IOrganization> organizationQM;
-        private IRecordManager<IOrganization, IAppUser> organizationRM;
+        private IQueryManager<Organization> organizationQM;
+        private IRecordManager<Organization, IAppUser> organizationRM;
 
         private UserManager<AppUser> UserManager
         {
