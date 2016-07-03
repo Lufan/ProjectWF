@@ -91,12 +91,12 @@
                                 <label class="control-label col-sm-2" for="shurname">Фамилия: </label>
                                 <input id="shurname" type="text" ng-model="contact.Shurname" class="form-control" /><br />
                             </div>
-                        
+
                             <div class="form-group col-sm-4">
                                 <label class="control-label col-sm-2" for="name">Имя: </label>
                                 <input id="name" type="text" ng-model="contact.Name" class="form-control" />
                             </div>
-                        
+
                             <div class="form-group col-sm-4">
                                 <label class="control-label col-sm-2" for="patronymic">Отчество: </label>
                                 <input id="patronymic" type="text" ng-model="contact.Patronymic" class="form-control" /><br />
@@ -145,8 +145,8 @@
                             <div class="form-group col-sm-4">
                                 <label class="control-label">Организация: </label>
                                 <text class="form-control col-sm-4" type="text" ng-model="contact.OrganizationName" ng-required value="{{contact.OrganizationName}}">
-									{{contact.OrganizationName}}
-								</text>
+                                    {{contact.OrganizationName}}
+                                </text>
                             </div>
                             <div class="form-group col-sm-4 hidden">
                                 <label class="control-label">Id: </label>
@@ -166,32 +166,42 @@
             </div>
         </script>
 
-		<script type="text/ng-template" id="selectOrganizationForm.html">
+        <script type="text/ng-template" id="selectOrganizationForm.html">
             <div class="modal-header">
                 <h3 class="modal-title">Выбор организации</h3>
             </div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="form-group">
-				        <label class="control-label">Поиск по организациям:</label>
-				        <input class="form-control col-sm-4" type="text" ng-model="search_pattern_org" autofocus />
-					</div>
-				</div>
-				<div class="row">
-					<div class="form-group">
-						<select ng-options="o.OrganizationName for o in organizations track by o.Id | filter : search_pattern_org" ng-model="orgSelected"></select>
-						<!--
-						<select class="form-control col-sm-4" name="Organizations" ng-model="orgSelected">
-							<option ng-repeat="organization in organizations | filter : search_pattern_org" value="{{organization.Id}}">{{organization.OrganizationName}}</option>
-						</select>
-						-->
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-primary" type="button" data-ng-click="ok()">Выбрать</button>
-				<button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
-			</div>
-		</script>
+            <div class="modal-body">
+                <form>
+                    <fieldset>
+                        <div>
+                            Шаблон поиска:
+                            <input type="search" ng-model="orgSelected" placeholder="фильтр организаций..." aria-label="filter organizations" />
+                            <ul class="animate-container">
+                                <li class="animate-repeat" ng-repeat="o in organizations | filter:orgSelected as results">
+                                    <input type="checkbox"
+                                           name="Organizations"
+                                           data-id="{{o.Id}}"
+                                           ng-model="o.isSelected"
+                                           ng-checked="o.isSelected" 
+                                           ng-click="selectOrganization($event)" />
+                                    <a href="" data-id="{{o.Id}}" class="list-group-item-info" ng-click="selectOrganization($event)">
+                                        
+                                        {{o.OrganizationName}}
+                                    </a>
+                                </li>
+                                <li class="animate-repeat" ng-if="results.length == 0">
+                                    <strong>No results found...</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+                    </form>
+                </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-ng-click="ok()">Выбрать</button>
+                <button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
+            </div>
+        </script>
     </div>
 </div>

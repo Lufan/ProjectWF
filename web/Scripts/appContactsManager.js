@@ -125,18 +125,36 @@
         var OrganizationPromise = getOrganizationsService.getData();
         OrganizationPromise.then(function (result) {
             $scope.organizations = result;
-            $scope.orgSelected = {};
+            $scope.orgSelected = "";
             for (var i = 0; i < $scope.organizations.length; i++) {
                 if ($scope.organizations[i].Id === id) {
-                    $scope.orgSelected = $scope.organizations[i];
-                    break;
+                    $scope.resultSelected = $scope.organizations[i];
+                    $scope.organizations[i].isSelected = true;
+                } else {
+                    $scope.organizations[i].isSelected = false;
                 }
             }
         });
 
+        $scope.selectOrganization = function (event) {
+            $log.info('Event = ' + event.target);
+            $log.info('Event data-id = ' + $(event.target).attr("data-id"));
+            $log.info('Event checked = ' + $(event.target).attr("checked"));
+
+            var id = $(event.target).attr("data-id");
+            for (var i = 0; i < $scope.organizations.length; i++) {
+                if ($scope.organizations[i].Id === id) {
+                    $scope.resultSelected = $scope.organizations[i];
+                    $scope.organizations[i].isSelected = true;
+                } else {
+                    $scope.organizations[i].isSelected = false;
+                }
+            }
+        }
+
         $scope.ok = function () {
             $log.info('Result Ok at: org name = ' + $scope.orgSelected.OrganizationName);
-            $uibModalInstance.close($scope.orgSelected);
+            $uibModalInstance.close($scope.resultSelected);
         };
 
         $scope.cancel = function () {
