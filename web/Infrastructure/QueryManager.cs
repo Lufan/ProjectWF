@@ -28,7 +28,7 @@ namespace web.Infrastructure
             //If id is null or empty, do nothing
             if (string.IsNullOrEmpty(id))
             {
-                return null;
+                return Task.FromResult(default(TDocument));
             }
             return _store.FindByIdAsync(id);
         }
@@ -38,7 +38,7 @@ namespace web.Infrastructure
             //If name is null or empty, do nothing
             if (string.IsNullOrEmpty(name))
             {
-                return null;
+                return Task.FromResult(default(IEnumerable<TDocument>));
             }
             return _store.FindByFieldAsync(expression, name);
         }
@@ -48,7 +48,7 @@ namespace web.Infrastructure
             //If count is 0, do nothing
             if (count == 0)
             {
-                return null;
+                return Task.FromResult(default(IQueryable<TDocument>));
             }
 
             return Task.FromResult(_store.GetAsQueryable.Skip(startPosition).Take(count));
