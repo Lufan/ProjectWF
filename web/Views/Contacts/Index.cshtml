@@ -11,7 +11,7 @@
         <div class="panel-heading">Контакты</div>
         <table class="table table-striped table-responsive">
             <caption>
-                @Html.ActionLink("Добавить...", "New", null, new { @class = "btn btn-default pull-right" + (@Request.IsAuthenticated ? " " : " disabled") })
+                <a href="#" data-id="" ng-click="openContact($event)" class="btn btn-default pull-right">Добавить...</a>
                 <div class="input-group pull-left">
                     Поиск по контактам:
                     <input class="input-sm" type="text" ng-model="search_pattern" autofocus />

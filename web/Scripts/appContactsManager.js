@@ -42,6 +42,7 @@
         });
 
         $scope.animationsEnabled = true;
+        $scope.selected_contact = { Phones: [{ Number: "", Desscription: "" }], Emails: [{ Address: "", Description: "" }] };
 
         $scope.openContact = function (event) {
             var id = $(event.target).attr("data-id");
@@ -74,9 +75,10 @@
                 }, function myError(response) {
                     $log.info('Error post: ' + response);
                 });
-
+                $scope.selected_contact = { Phones: [{ Number: "", Desscription: "" }], Emails: [{ Address: "", Description: "" }] };
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
+                $scope.selected_contact = { Phones: [{ Number: "", Desscription: "" }], Emails: [{ Address: "", Description: "" }] };
             });
         };
         
@@ -90,10 +92,12 @@
 
         $scope.ok = function () {
             $uibModalInstance.close(contact.Id);
+            $scope.contact = {}
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
+            $scope.contact = {}
         };
 
         $scope.selectOrganization = function (event) {
@@ -150,7 +154,7 @@
                     $scope.organizations[i].isSelected = false;
                 }
             }
-        }
+        };
 
         $scope.ok = function () {
             $log.info('Result Ok at: org name = ' + $scope.orgSelected.OrganizationName);
