@@ -79,7 +79,7 @@ namespace web.Controllers
         }
 
         // POST: api/ApiContacts
-        public async Task Post([FromBody]ContactsViewModel contact)
+        public async Task<IHttpActionResult> Post([FromBody]ContactsViewModel contact)
         {
             if (contact != null)
             {
@@ -98,12 +98,12 @@ namespace web.Controllers
                         Remarks = contact.Remarks
                     };
                     var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
-                    if (user_query.Count() == 0) return;
+                    if (user_query.Count() == 0) return Ok(new HttpError("User not found"));
                     await contactRM.CreateAsync(ct, user_query.First());
                 } else
                 {
-                    ct = await contactQM.FindByIdAsync(contact.Id);
-                    if (ct == null) return;
+                    //ct = await contactQM.FindByIdAsync(contact.Id);
+                    //if (ct == null) return Ok(new HttpError("User not found"));
                     ct.Name = contact.Name;
                     ct.Shurname = contact.Shurname;
                     ct.Patronymic = contact.Patronymic;
@@ -115,12 +115,14 @@ namespace web.Controllers
                     try
                     {
                         var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
-                        if (user_query.Count() == 0) return;
+                        if (user_query.Count() == 0) return Ok(new HttpError("User not found"));
 
                         await contactRM.UpdateAsync(ct, user_query.First());
+
                     } catch (Exception ex)
                     {
                         string res = ex.ToString();
+                        Ok(new HttpError(res));
                     }
                 }
             }

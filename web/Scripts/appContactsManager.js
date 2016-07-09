@@ -64,21 +64,45 @@
                 }
             });
 
-            modalInstance.result.then(function () {
-                $log.info('Modal updated at: ' + $scope.selected_contact.Id);
-                $http({
-                    method: "POST",
-                    url: "/api/ApiContacts/",
-                    data: $scope.selected_contact
-                }).then(function mySucces(response) {
-                    $log.info('Succes post: ' + response);
-                }, function myError(response) {
-                    $log.info('Error post: ' + response);
-                });
-                $scope.contacts.push($scope.selected_contact)
+            modalInstance.result.then(function (data) {
+                $log.info('Modal updated at: ' + $scope.selected_contact.Id + " == " + data.id + " isDeleted = " + data.isDeleted);
+                if (data.isDeleted) {
+                    $http({
+                        method: "DELETE",
+                        url: "/api/ApiContacts/" + data.id,
+                        data: null
+                    }).then(function mySucces(response) {
+                        $log.info('Succes delete: ' + response);
+                        for (var i = 0; i < $scope.contacts.length; i++) {
+                            if ($scope.contacts[i].Id === data.id) {
+                                $scope.contacts.splice(i, 1);
+                                break;
+                            }
+                        }
+                    }, function myError(response) {
+                        // TO DO: show message to user about error
+                        $log.info('Error delete: ' + response);
+                    });
+                } else {
+                    $http({
+                        method: "POST",
+                        url: "/api/ApiContacts/",
+                        data: $scope.selected_contact
+                    }).then(function mySucces(response) {
+                        $log.info('Succes post: ' + response);
+                        isExist = false;
+                        if (typeof $scope.selected_contact.id === "undefined") {
+                            $scope.contacts.push(JSON.parse(JSON.stringify($scope.selected_contact)));
+                        }
+                    }, function myError(response) {
+                        // TO DO: show message to user about error
+                        $log.info('Error post: ' + response);
+                    });
+                };
+                
                 $scope.selected_contact = { Phones: [{ Number: "", Desscription: "" }], Emails: [{ Address: "", Description: "" }] };
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
+            }, function (res) {
+                $log.info('Modal dismissed at: ' + new Date() + " " + res);
                 $scope.selected_contact = { Phones: [{ Number: "", Desscription: "" }], Emails: [{ Address: "", Description: "" }] };
             });
         };
@@ -92,12 +116,17 @@
         $scope.contact = contact;
 
         $scope.ok = function () {
-            $uibModalInstance.close(contact.Id);
+            $uibModalInstance.close({"id" : contact.Id, isDeleted: false});
             $scope.contact = {}
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
+            $scope.contact = {}
+        };
+
+        $scope.delete = function () {
+            $uibModalInstance.close({ "id": contact.Id, isDeleted: true });
             $scope.contact = {}
         };
 

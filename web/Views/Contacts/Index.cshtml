@@ -55,7 +55,7 @@
             </thead>
             <tbody>
 
-                <tr ng-repeat="contact in contacts | filter : search_pattern">
+                <tr ng-repeat="contact in contacts | filter : search_pattern track by $index ">
                     <td>
                         <a href="#" data-id="{{contact.Id}}" ng-click="openContact($event)">{{contact.Shurname}}</a>
                     </td>
@@ -161,7 +161,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn pull-left btn-danger @(@Request.IsAuthenticated ? " " : " hidden")" type="button" data-ng-click="del()">Удалить</button>
+                <button class="btn pull-left btn-danger @(@Request.IsAuthenticated ? " " : " hidden")" type="button" data-ng-click="delete()">Удалить</button>
                 <button class="btn btn-primary @(@Request.IsAuthenticated ? " " : " hidden")" type="button" data-ng-click="ok()">Сохранить</button>
                 <button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
             </div>
