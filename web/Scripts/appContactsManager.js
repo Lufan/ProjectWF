@@ -75,6 +75,7 @@
                 }, function myError(response) {
                     $log.info('Error post: ' + response);
                 });
+                $scope.contacts.push($scope.selected_contact)
                 $scope.selected_contact = { Phones: [{ Number: "", Desscription: "" }], Emails: [{ Address: "", Description: "" }] };
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());

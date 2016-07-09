@@ -112,11 +112,11 @@
                                 <label class="control-label">Номер телефона: </label>
                                 <input class="form-control col-sm-4" type="text" ng-model="contact.Phones[$index].Number" ng-required value="{{phone.Number}}" />
                             </div>
-                            <div class="form-group col-sm-1" ng-show="{{$index !== 0}}">
+                            <div class="form-group col-sm-2" ng-show="{{$index !== 0}}">
                                 <label class="control-label invisible hidden-xs">Закрыть</label>
                                 <div class="btn btn-default" ng-click="removePhoneInput($index)"><span class="glyphicon glyphicon-minus"></span></div>
                             </div>
-                            <div class="form-group col-sm-1">
+                            <div class="form-group col-sm-2">
                                 <label class="control-label">Добавить</label>
                                 <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" ng-click="addPhoneInput()"><span class="glyphicon glyphicon-plus"></span></div>
                             </div>
@@ -131,11 +131,11 @@
                                 <label class="control-label">Электронный адрес: </label>
                                 <input class="form-control col-sm-4" type="text" ng-model="contact.Emails[$index].Address" ng-required value="{{email.Address}}" />
                             </div>
-                            <div class="form-group col-sm-1" ng-show="{{$index !== 0}}">
+                            <div class="form-group col-sm-2" ng-show="{{$index !== 0}}">
                                 <label class="control-label invisible hidden-xs">Закрыть</label>
                                 <div class="btn btn-default" ng-click="removeEmailInput($index)"><span class="glyphicon glyphicon-minus"></span></div>
                             </div>
-                            <div class="form-group col-sm-1">
+                            <div class="form-group col-sm-2">
                                 <label class="control-label">Добавить:</label>
                                 <div class="form-control col-sm-2 col-lg-2 col-md-2 btn btn-default" ng-click="addEmailInput()"><span class="glyphicon glyphicon-plus"></span></div>
                             </div>
@@ -161,6 +161,7 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <button class="btn pull-left btn-danger @(@Request.IsAuthenticated ? " " : " hidden")" type="button" data-ng-click="del()">Удалить</button>
                 <button class="btn btn-primary @(@Request.IsAuthenticated ? " " : " hidden")" type="button" data-ng-click="ok()">Сохранить</button>
                 <button class="btn btn-warning" type="button" data-ng-click="cancel()">Отмена</button>
             </div>
