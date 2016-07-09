@@ -271,7 +271,6 @@
     <Content Include="Views\Plans\Index.cshtml" />
     <Content Include="Views\Mails\Index.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
-    <Content Include="Views\Contacts\Contact.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
