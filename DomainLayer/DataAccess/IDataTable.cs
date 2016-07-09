@@ -8,7 +8,7 @@ namespace DomainLayer.DataAccess
 {
     public interface IDataTable<TDocument>
     {
-        Task Insert(TDocument doc);
+        Task<string> Insert(TDocument doc);
 
         IQueryable<TDocument> GetCollection();
 

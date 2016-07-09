@@ -11,7 +11,7 @@ namespace DomainLayer.DataAccess.Record
     /// <typeparam name="TUser">User record type</typeparam>
     public interface IDocumentRecordStore<TDocument, TUser>
     {
-        Task CreateAsync(
+        Task<string> CreateAsync(
             TDocument document, 
             TUser user
             );

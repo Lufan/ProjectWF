@@ -98,8 +98,9 @@ namespace web.Controllers
                         Remarks = contact.Remarks
                     };
                     var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
-                    if (user_query.Count() == 0) return Ok(new HttpError("User not found"));
+                    if (user_query.Count() == 0) return Ok(new HttpError("User not found."));
                     await contactRM.CreateAsync(ct, user_query.First());
+                    return Ok(ct.Id);
                 } else
                 {
                     //ct = await contactQM.FindByIdAsync(contact.Id);
@@ -115,17 +116,18 @@ namespace web.Controllers
                     try
                     {
                         var user_query = UserManager.Users.Select(e => e).Where(e => e.Id == User.Identity.GetUserId());
-                        if (user_query.Count() == 0) return Ok(new HttpError("User not found"));
+                        if (user_query.Count() == 0) return Ok(new HttpError("User not found."));
 
                         await contactRM.UpdateAsync(ct, user_query.First());
-
+                        return Ok(ct.Id);
                     } catch (Exception ex)
                     {
                         string res = ex.ToString();
-                        Ok(new HttpError(res));
+                        return Ok(new HttpError(res));
                     }
                 }
             }
+            return Ok(new HttpError("Contact is null."));
         }
 
         // PUT: api/ApiContacts/5

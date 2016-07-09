@@ -9,7 +9,7 @@ namespace web.Infrastructure
 {
     public interface IRecordManager<TDocument, TUser> where TDocument : IDocument where TUser : IAppUser
     {
-        Task CreateAsync(TDocument document, TUser user);
+        Task<string> CreateAsync(TDocument document, TUser user);
 
         Task<long> DeleteAsync(TDocument document, TUser user);
 

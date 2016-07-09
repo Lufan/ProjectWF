@@ -21,9 +21,10 @@ namespace DomainLayer.DataAccess.MongoDb
             return _collection.AsQueryable<TDocument>();
         }
 
-        public async Task Insert(TDocument doc)
+        public async Task<string> Insert(TDocument doc)
         {
             await _collection.InsertOneAsync(doc);
+            return doc.Id;
         }
 
         public async Task<long> Remove<TVal>(

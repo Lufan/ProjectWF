@@ -57,7 +57,7 @@ namespace DomainLayer.DataAccess.Record
         /// Task<bool> representing the status of the operation: 
         /// true - success, false - fails.
         /// </returns>
-        public async Task CreateAsync(
+        public async Task<string> CreateAsync(
             TDocument document, 
             TUser user
             )
@@ -72,7 +72,8 @@ namespace DomainLayer.DataAccess.Record
             {
                 throw new ArgumentNullException("User is null.");
             }
-            await this.GetCollection().Insert(document);
+            return await this.GetCollection().Insert(document);
+
         }
 
         /// <summary>

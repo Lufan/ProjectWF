@@ -55,7 +55,7 @@
             </thead>
             <tbody>
 
-                <tr ng-repeat="contact in contacts | filter : search_pattern track by $index ">
+                <tr ng-repeat="contact in contacts | filter : search_pattern track by contact.Id ">
                     <td>
                         <a href="#" data-id="{{contact.Id}}" ng-click="openContact($event)">{{contact.Shurname}}</a>
                     </td>

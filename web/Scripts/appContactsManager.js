@@ -84,15 +84,17 @@
                         $log.info('Error delete: ' + response);
                     });
                 } else {
+                    var saved_contact = JSON.parse(JSON.stringify($scope.selected_contact));
                     $http({
                         method: "POST",
                         url: "/api/ApiContacts/",
                         data: $scope.selected_contact
                     }).then(function mySucces(response) {
-                        $log.info('Succes post: ' + response);
+                        $log.info('Succes post.');
                         isExist = false;
-                        if (typeof $scope.selected_contact.id === "undefined") {
-                            $scope.contacts.push(JSON.parse(JSON.stringify($scope.selected_contact)));
+                        if (typeof saved_contact.Id === "undefined") {
+                            saved_contact.Id = response.data;
+                            $scope.contacts.push(saved_contact);
                         }
                     }, function myError(response) {
                         // TO DO: show message to user about error

@@ -43,9 +43,10 @@ namespace UnitTests.TestHelpers
             return _collection.AsQueryable<TDocument>();
         }
 
-        public async Task Insert(TDocument doc)
+        public async Task<string> Insert(TDocument doc)
         {
             await Task.Run(() => _collection.Add(doc));
+            return doc.Id;
         }
 
         public async Task<long> Remove<TVal>(Expression<Func<TDocument, bool>> predicat)

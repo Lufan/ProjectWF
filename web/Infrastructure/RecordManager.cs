@@ -25,7 +25,7 @@ namespace web.Infrastructure
             _store = store;
         }
 
-        public Task CreateAsync(TDocument document, TUser user)
+        public Task<string> CreateAsync(TDocument document, TUser user)
         {
             if (document == null)
             {
