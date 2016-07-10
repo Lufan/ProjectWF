@@ -13,6 +13,7 @@ namespace DomainLayer.Contact
             {
                 Country = adress.Country;
                 District = adress.District;
+                Region = adress.Region;
                 City = adress.City;
                 Index = adress.Index;
                 AdressLines = adress.AdressLines;
@@ -23,6 +24,8 @@ namespace DomainLayer.Contact
         public string Country { get; set; }
 
         public string District { get; set; }
+
+        public string Region { get; set; }
 
         public string City { get; set; }
 

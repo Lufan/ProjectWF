@@ -8,6 +8,8 @@ namespace DomainLayer.Contact
 
         string District { get; set; }
 
+        string Region { get; set; }
+
         string City { get; set; }
 
         string Index { get; set; }
